@@ -1,0 +1,4 @@
+inherited frmAcompanharEntrega: TfrmAcompanharEntrega
+  Caption = 'Acompanhar Entrega'
+  DesignerMasterStyle = 0
+end

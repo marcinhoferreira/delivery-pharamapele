@@ -1,0 +1,573 @@
+inherited frmCriarPedido: TfrmCriarPedido
+  Caption = 'Criar Pedido'
+  DesignerMasterStyle = 0
+  inherited lytWorkArea: TLayout
+    inherited barToolBar: TToolBar
+      inherited lblTituloFormulario: TLabel
+        Size.Width = 656.000000000000000000
+      end
+      object btnFinalizar: TSpeedButton
+        Align = Right
+        Margins.Left = 4.000000000000000000
+        Margins.Top = 4.000000000000000000
+        Margins.Right = 4.000000000000000000
+        Margins.Bottom = 4.000000000000000000
+        Position.X = 716.000000000000000000
+        Position.Y = 4.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'speedbuttonstyle'
+        Text = 'Finalizar'
+        TextSettings.Trimming = None
+        OnClick = btnFinalizarClick
+      end
+    end
+    object lstvwItensPedido: TListView
+      ItemAppearanceClassName = 'TDynamicAppearance'
+      ItemEditAppearanceClassName = 'TDynamicAppearance'
+      HeaderAppearanceClassName = 'TListHeaderObjects'
+      FooterAppearanceClassName = 'TListHeaderObjects'
+      Align = Client
+      Size.Width = 800.000000000000000000
+      Size.Height = 255.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      ItemAppearance.ItemHeight = 50
+      ItemAppearanceObjects.ItemObjects.ObjectsCollection = <
+        item
+          AppearanceObjectName = 'txtItemPedidoNome'
+          AppearanceClassName = 'TTextObjectAppearance'
+          Appearance.TextAlign = Leading
+          Appearance.Width = 553.000000000000000000
+          Appearance.Height = 25.000000000000000000
+          Appearance.PlaceOffset.X = 107.000000000000000000
+        end
+        item
+          AppearanceObjectName = 'txtItemPedidoQuantidade'
+          AppearanceClassName = 'TTextObjectAppearance'
+          Appearance.TextAlign = Trailing
+          Appearance.Width = 119.000000000000000000
+          Appearance.Height = 25.000000000000000000
+          Appearance.Align = Trailing
+        end
+        item
+          AppearanceObjectName = 'txtItemPedidoCodigo'
+          AppearanceClassName = 'TTextObjectAppearance'
+          Appearance.TextAlign = Leading
+          Appearance.Width = 107.000000000000000000
+          Appearance.Height = 25.000000000000000000
+        end
+        item
+          AppearanceObjectName = 'txtItemPedidoArmazenamento'
+          AppearanceClassName = 'TTextObjectAppearance'
+          Appearance.TextAlign = Leading
+          Appearance.Height = 25.000000000000000000
+          Appearance.PlaceOffset.Y = 25.000000000000000000
+        end>
+      ItemAppearanceObjects.ItemEditObjects.ObjectsCollection = <
+        item
+          AppearanceObjectName = 'Text1'
+          AppearanceClassName = 'TTextObjectAppearance'
+        end>
+      StyleLookup = 'listviewstyle'
+    end
+    object lytIdentificacao: TLayout
+      Align = Top
+      Position.Y = 48.000000000000000000
+      Size.Width = 800.000000000000000000
+      Size.Height = 68.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object lblNumeroPedido: TLabel
+        AutoSize = True
+        Margins.Left = 4.000000000000000000
+        Margins.Top = 4.000000000000000000
+        Margins.Right = 4.000000000000000000
+        Margins.Bottom = 4.000000000000000000
+        Position.X = 8.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 104.000000000000000000
+        Size.Height = 16.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'labelstyle'
+        TextSettings.WordWrap = False
+        Text = 'N'#250'mero do Pedido:'
+        TabOrder = 6
+      end
+      object edtNumeroPedido: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        StyleLookup = 'editstyle'
+        TabOrder = 1
+        CanFocus = False
+        ReadOnly = True
+        Position.X = 8.000000000000000000
+        Position.Y = 32.000000000000000000
+        Enabled = False
+        Margins.Left = 4.000000000000000000
+        Margins.Top = 4.000000000000000000
+        Margins.Right = 4.000000000000000000
+        Margins.Bottom = 4.000000000000000000
+        Size.Width = 128.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object lblSituacao: TLabel
+        Anchors = [akTop, akRight]
+        AutoSize = True
+        Margins.Left = 4.000000000000000000
+        Margins.Top = 4.000000000000000000
+        Margins.Right = 4.000000000000000000
+        Margins.Bottom = 4.000000000000000000
+        Position.X = 664.000000000000000000
+        Position.Y = 8.000000000000000000
+        Size.Width = 105.000000000000000000
+        Size.Height = 16.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'labelstyle'
+        TextSettings.WordWrap = False
+        Text = 'Situa'#231#227'o do Pedido:'
+        TabOrder = 5
+      end
+      object edtSituacaoPedido: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Anchors = [akTop, akRight]
+        StyleLookup = 'editstyle'
+        TabOrder = 0
+        CanFocus = False
+        ReadOnly = True
+        Position.X = 664.000000000000000000
+        Position.Y = 32.000000000000000000
+        Enabled = False
+        Margins.Left = 4.000000000000000000
+        Margins.Top = 4.000000000000000000
+        Margins.Right = 4.000000000000000000
+        Margins.Bottom = 4.000000000000000000
+        Size.Width = 128.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+    object tabctrlPedido: TTabControl
+      Align = Top
+      Position.Y = 116.000000000000000000
+      Size.Width = 800.000000000000000000
+      Size.Height = 229.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'tabcontrolstyle'
+      TabIndex = 1
+      TabOrder = 3
+      TabPosition = PlatformDefault
+      OnChange = tabctrlPedidoChange
+      Sizes = (
+        800s
+        203s
+        800s
+        203s)
+      object tabitmPedido: TTabItem
+        CustomIcon = <
+          item
+          end>
+        TextSettings.Trimming = None
+        IsSelected = False
+        Size.Width = 92.000000000000000000
+        Size.Height = 26.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'tabitemstyle'
+        TabOrder = 0
+        Text = 'tabitmPedido'
+        object lytPedido: TLayout
+          Align = Client
+          Size.Width = 800.000000000000000000
+          Size.Height = 203.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          object chkProdutoControlado: TCheckBox
+            Anchors = [akTop, akRight]
+            Enabled = False
+            Position.X = 356.000000000000000000
+            Position.Y = 83.000000000000000000
+            StyleLookup = 'checkboxstyle'
+            TabOrder = 11
+            Text = 'Controlado'
+          end
+          object chkProdutoSensivel: TCheckBox
+            Anchors = [akTop, akRight]
+            Enabled = False
+            Position.X = 484.000000000000000000
+            Position.Y = 83.000000000000000000
+            StyleLookup = 'checkboxstyle'
+            TabOrder = 10
+            Text = 'Sens'#237'vel'
+          end
+          object edProdutoArmazenamnto: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Anchors = [akLeft, akTop, akRight]
+            StyleLookup = 'editstyle'
+            TabOrder = 1
+            CanFocus = False
+            ReadOnly = True
+            Position.X = 144.000000000000000000
+            Position.Y = 140.000000000000000000
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 488.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object edtCodigo: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            StyleLookup = 'editstyle'
+            TabOrder = 3
+            Position.X = 8.000000000000000000
+            Position.Y = 28.000000000000000000
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 128.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            KillFocusByReturn = True
+            CharCase = ecUpperCase
+            OnChange = edtCodigoChange
+            OnKeyDown = edtCodigoKeyDown
+            OnEnter = edtCodigoEnter
+          end
+          object edtProdutoNome: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Anchors = [akLeft, akTop, akRight]
+            StyleLookup = 'editstyle'
+            TabOrder = 2
+            CanFocus = False
+            ReadOnly = True
+            Position.X = 144.000000000000000000
+            Position.Y = 28.000000000000000000
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 488.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object edtTipo: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Anchors = [akLeft, akTop, akRight]
+            StyleLookup = 'editstyle'
+            TabOrder = 0
+            CanFocus = False
+            ReadOnly = True
+            Position.X = 144.000000000000000000
+            Position.Y = 83.000000000000000000
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 200.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object lblCodigo: TLabel
+            AutoSize = True
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Position.X = 8.000000000000000000
+            Position.Y = 8.000000000000000000
+            Size.Width = 42.000000000000000000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'labelstyle'
+            TextSettings.WordWrap = False
+            Text = 'C'#243'digo:'
+            TabOrder = 9
+          end
+          object lblProdutoArmazenamento: TLabel
+            AutoSize = True
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Position.X = 144.000000000000000000
+            Position.Y = 113.000000000000000000
+            Size.Width = 166.000000000000000000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'labelstyle'
+            TextSettings.WordWrap = False
+            Text = 'Condi'#231#245'es de Armazenamento:'
+            TabOrder = 5
+          end
+          object lblProdutoNome: TLabel
+            AutoSize = True
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Position.X = 144.000000000000000000
+            Position.Y = 4.000000000000000000
+            Size.Width = 46.000000000000000000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'labelstyle'
+            TextSettings.WordWrap = False
+            Text = 'Produto:'
+            TabOrder = 6
+          end
+          object lblQuantidade: TLabel
+            Anchors = [akTop, akRight]
+            AutoSize = True
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Position.X = 640.000000000000000000
+            Position.Y = 8.000000000000000000
+            Size.Width = 65.000000000000000000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'labelstyle'
+            TextSettings.WordWrap = False
+            Text = 'Quantidade:'
+            TabOrder = 8
+          end
+          object lblTipo: TLabel
+            AutoSize = True
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Position.X = 144.000000000000000000
+            Position.Y = 59.000000000000000000
+            Size.Width = 26.000000000000000000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'labelstyle'
+            TextSettings.WordWrap = False
+            Text = 'Tipo:'
+            TabOrder = 4
+          end
+          object nbQuantidade: TNumberBox
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Anchors = [akTop, akRight]
+            StyleLookup = 'numberboxstyle'
+            TabOrder = 7
+            Cursor = crIBeam
+            DecimalDigits = 0
+            Min = 1.000000000000000000
+            Max = 99999999.000000000000000000
+            Value = 1.000000000000000000
+            KeyboardType = Default
+            TextSettings.HorzAlign = Trailing
+            Position.X = 640.000000000000000000
+            Position.Y = 28.000000000000000000
+            VertIncrement = 1.000000000000000000
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 132.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            OnKeyDown = nbQuantidadeKeyDown
+          end
+        end
+      end
+      object tabitmEntrega: TTabItem
+        CustomIcon = <
+          item
+          end>
+        TextSettings.Trimming = None
+        IsSelected = True
+        Size.Width = 96.000000000000000000
+        Size.Height = 26.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = ''
+        TabOrder = 0
+        Text = 'tabitmEntrega'
+        object lytEntrega: TLayout
+          Align = Client
+          Size.Width = 800.000000000000000000
+          Size.Height = 203.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object btnConfirmar: TButton
+            Position.X = 316.000000000000000000
+            Position.Y = 173.000000000000000000
+            TabOrder = 5
+            Text = 'Confirmar'
+            TextSettings.Trimming = None
+            OnClick = btnConfirmarClick
+          end
+          object btnCancelar: TButton
+            Position.X = 404.000000000000000000
+            Position.Y = 173.000000000000000000
+            TabOrder = 6
+            Text = 'Cancelar'
+            TextSettings.Trimming = None
+            OnClick = btnCancelarClick
+          end
+          object lblNome: TLabel
+            AutoSize = True
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Position.X = 12.000000000000000000
+            Position.Y = 12.000000000000000000
+            Size.Width = 93.000000000000000000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'labelstyle'
+            TextSettings.WordWrap = False
+            Text = 'Nome do Cliente:'
+            TabOrder = 13
+          end
+          object edtNome: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Anchors = [akLeft, akTop, akRight]
+            StyleLookup = 'editstyle'
+            TabOrder = 3
+            Position.X = 12.000000000000000000
+            Position.Y = 36.000000000000000000
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 780.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object edtEnderecoCep: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            StyleLookup = 'editstyle'
+            TabOrder = 4
+            FilterChar = '01234567890'
+            Position.X = 12.000000000000000000
+            Position.Y = 92.000000000000000000
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 93.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object lblEnderecoCep: TLabel
+            AutoSize = True
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Position.X = 12.000000000000000000
+            Position.Y = 68.000000000000000000
+            Size.Width = 23.000000000000000000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'labelstyle'
+            TextSettings.WordWrap = False
+            Text = 'CEP:'
+            TabOrder = 9
+          end
+          object lblEnderecoRua: TLabel
+            AutoSize = True
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Position.X = 113.000000000000000000
+            Position.Y = 68.000000000000000000
+            Size.Width = 23.000000000000000000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'labelstyle'
+            TextSettings.WordWrap = False
+            Text = 'Rua:'
+            TabOrder = 12
+          end
+          object edtEnderecoRua: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Anchors = [akLeft, akTop, akRight]
+            StyleLookup = 'editstyle'
+            TabOrder = 2
+            Position.X = 113.000000000000000000
+            Position.Y = 92.000000000000000000
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 487.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object lblEnderecoNumero: TLabel
+            Anchors = [akTop, akRight]
+            AutoSize = True
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Position.X = 608.000000000000000000
+            Position.Y = 68.000000000000000000
+            Size.Width = 47.000000000000000000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'labelstyle'
+            TextSettings.WordWrap = False
+            Text = 'N'#250'mero:'
+            TabOrder = 11
+          end
+          object edtEnderecoNumero: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Anchors = [akTop, akRight]
+            StyleLookup = 'editstyle'
+            TabOrder = 1
+            Position.X = 608.000000000000000000
+            Position.Y = 92.000000000000000000
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 184.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object edtEnderecoBairro: TEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            StyleLookup = 'editstyle'
+            TabOrder = 0
+            Position.X = 12.000000000000000000
+            Position.Y = 148.000000000000000000
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 224.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object lblEnderecoBairro: TLabel
+            AutoSize = True
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Position.X = 12.000000000000000000
+            Position.Y = 124.000000000000000000
+            Size.Width = 34.000000000000000000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'labelstyle'
+            TextSettings.WordWrap = False
+            Text = 'Bairro:'
+            TabOrder = 10
+          end
+        end
+      end
+    end
+  end
+end

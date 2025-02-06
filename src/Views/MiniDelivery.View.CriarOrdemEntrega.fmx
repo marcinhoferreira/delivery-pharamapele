@@ -1,0 +1,4 @@
+inherited frmCriarOrdemEntrega: TfrmCriarOrdemEntrega
+  Caption = 'Criar Ordem de Entrega'
+  DesignerMasterStyle = 0
+end

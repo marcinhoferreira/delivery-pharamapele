@@ -1,0 +1,55 @@
+object frmPadrao: TfrmPadrao
+  Left = 0
+  Top = 0
+  Caption = 'frmPadrao'
+  ClientHeight = 600
+  ClientWidth = 800
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  DesignerMasterStyle = 0
+  object lytWorkArea: TLayout
+    Align = Client
+    Size.Width = 800.000000000000000000
+    Size.Height = 600.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object barToolBar: TToolBar
+      Size.Width = 800.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'toolbarstyle'
+      TabOrder = 0
+      object btnMenu: TSpeedButton
+        Align = Left
+        Margins.Left = 4.000000000000000000
+        Margins.Top = 4.000000000000000000
+        Margins.Right = 4.000000000000000000
+        Margins.Bottom = 4.000000000000000000
+        Position.X = 4.000000000000000000
+        Position.Y = 4.000000000000000000
+        Size.Width = 40.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'detailstoolbutton'
+        TextSettings.Trimming = None
+      end
+      object lblTituloFormulario: TLabel
+        Align = Client
+        AutoSize = True
+        Margins.Left = 4.000000000000000000
+        Margins.Top = 4.000000000000000000
+        Margins.Right = 4.000000000000000000
+        Margins.Bottom = 4.000000000000000000
+        Size.Width = 744.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'listboxheaderlabel'
+        Text = 'lblTituloFormulario'
+        TabOrder = 0
+      end
+    end
+  end
+end
