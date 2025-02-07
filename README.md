@@ -8,3 +8,11 @@ Aplicativo apresentado como possível implementação do Teste Técnico para Des
   - Firemonkey
   - FireDAC
   - FireBirdSQL 5.0
+
+## Passo-a-passo para execução do projeto
+
+```bash
+# clonar este repositório
+$ git clone https://github.com/marcinhoferreira/mini-delivery-pharamapele.git
+
+```
