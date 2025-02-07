@@ -11,8 +11,10 @@ Aplicativo apresentado como possível implementação do Teste Técnico para Des
 
 ## Passo-a-passo para execução do projeto
 
+  # clonar este repositório
+  
 ```bash
-# clonar este repositório
 $ git clone https://github.com/marcinhoferreira/mini-delivery-pharamapele.git
 ```
-### Abrir o RAD Studio 12 Athens e abir o projeto MiniDelivery.dpr
+
+  # Abrir o RAD Studio 12 Athens e abir o projeto MiniDelivery.dpr
