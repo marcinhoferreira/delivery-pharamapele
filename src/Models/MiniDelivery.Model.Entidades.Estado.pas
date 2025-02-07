@@ -23,7 +23,7 @@ type
       function DataSet(const Value: TDataSet): IModelEntidade; overload;
       procedure Open(const AWhere: String = '');
       function GetEstado(const Id: Integer): TEstado;
-      function GetEstados: TListaEstados;
+      function GetEstados(const PaisId: Integer): TListaEstados;
    end;
 
 implementation
@@ -75,13 +75,13 @@ begin
          end;
 end;
 
-function TModelEntidadeEstado.GetEstados: TListaEstados;
+function TModelEntidadeEstado.GetEstados(const PaisId: Integer): TListaEstados;
 var
    AEstado: TEstado;
    APaisModel: IModelEntidade;
 begin
    Result := TListaEstados.Create;
-   Open();
+   Open(Format('WHERE pais_id = %d', [PaisId]));
    with fQuery do
       if not Query.IsEmpty then
          begin
@@ -110,9 +110,10 @@ var
 begin
    ASQL := '';
    ASQL := ASQL + 'SELECT id, nome, pais_id ';
-   ASQL := ASQL + 'FROM estados';
+   ASQL := ASQL + 'FROM estados ';
    if AWhere <> '' then
-      ASQL := ASQL + ' ' + AWhere;
+      ASQL := ASQL + AWhere + ' ';
+   ASQL := ASQL + 'ORDER BY nome';
    fQuery.Open(ASQL);
    // Definindo o campo id, como autoincremento
    fQuery.Query.FieldByName('id').AutoGenerateValue := TAutoRefreshFlag.arAutoInc;

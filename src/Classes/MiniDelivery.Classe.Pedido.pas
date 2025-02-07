@@ -5,7 +5,8 @@ interface
 uses
    SysUtils, Classes, Generics.Collections,
    MiniDelivery.Classe.Produto,
-   MiniDelivery.Classe.Endereco;
+   MiniDelivery.Classe.Endereco,
+   MiniDelivery.Classe.Entregador;
 
 type
    TItemPedido = class(TObject)
@@ -13,10 +14,13 @@ type
       { Private declarations }
       fProduto: TProduto;
       fQuantidade: Double;
+      fAnotacoes: String;
       function GetProduto: TProduto;
       function GetQuantidade: Double;
       procedure SetProduto(const Value: TProduto);
       procedure SetQuantidade(const Value: Double);
+    function GetAnotacoes: String;
+    procedure SetAnotacoes(const Value: String);
    protected
       { Protected declarations }
    public
@@ -25,6 +29,7 @@ type
       destructor Destroy; override;
       property Produto: TProduto Read GetProduto Write SetProduto;
       property Quantidade: Double Read GetQuantidade Write SetQuantidade;
+      property Anotacoes: String Read GetAnotacoes Write SetAnotacoes;
    end;
 
    TArrayItensPedido = Array Of TItemPedido;
@@ -49,6 +54,7 @@ type
       fNome: String;
       fEndereco: TEndereco;
       fSituacao: String;
+      fEntregador: TEntregador;
       function GetId: Integer;
       function GetNome: String;
       procedure SetId(const Value: Integer);
@@ -57,6 +63,8 @@ type
       function GetSituacao: String;
       procedure SetEndereco(const Value: TEndereco);
       procedure SetSituacao(const Value: String);
+      function GetEntregador: TEntregador;
+      procedure SetEntregador(const Value: TEntregador);
    protected
       { Protected declarations }
    public
@@ -67,6 +75,7 @@ type
       property Nome: String Read GetNome Write SetNome;
       property Endereco: TEndereco Read GetEndereco Write SetEndereco;
       property Situacao: String Read GetSituacao Write SetSituacao;
+      property Entregador: TEntregador Read GetEntregador Write SetEntregador;
    end;
 
    TArrayPedidos = Array Of TPedido;
@@ -91,17 +100,24 @@ implementation
 constructor TPedido.Create;
 begin
    fEndereco := TEndereco.Create;
+   fEntregador := TEntregador.Create;
 end;
 
 destructor TPedido.Destroy;
 begin
    FreeAndNil(fEndereco);
+   FreeAndNil(fEntregador);
   inherited;
 end;
 
 function TPedido.GetEndereco: TEndereco;
 begin
    Result := fEndereco;
+end;
+
+function TPedido.GetEntregador: TEntregador;
+begin
+   Result := fEntregador;
 end;
 
 function TPedido.GetId: Integer;
@@ -122,6 +138,11 @@ end;
 procedure TPedido.SetEndereco(const Value: TEndereco);
 begin
    fEndereco := Value;
+end;
+
+procedure TPedido.SetEntregador(const Value: TEntregador);
+begin
+   fEntregador := Value;
 end;
 
 procedure TPedido.SetId(const Value: Integer);
@@ -169,6 +190,11 @@ begin
   inherited;
 end;
 
+function TItemPedido.GetAnotacoes: String;
+begin
+   Result := fAnotacoes;
+end;
+
 function TItemPedido.GetProduto: TProduto;
 begin
    Result := fProduto;
@@ -177,6 +203,12 @@ end;
 function TItemPedido.GetQuantidade: Double;
 begin
    Result := fQuantidade;
+end;
+
+procedure TItemPedido.SetAnotacoes(const Value: String);
+begin
+   if Value <> fAnotacoes then
+      fAnotacoes := Value;
 end;
 
 procedure TItemPedido.SetProduto(const Value: TProduto);

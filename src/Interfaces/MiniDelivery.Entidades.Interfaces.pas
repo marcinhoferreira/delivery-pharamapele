@@ -23,6 +23,7 @@ type
       function Municipio: IModelEntidade;
       function Pedido: IModelEntidade;
       function ItemPedido: IModelEntidade;
+      function Entregador: IModelEntidade;
    end;
 
 implementation

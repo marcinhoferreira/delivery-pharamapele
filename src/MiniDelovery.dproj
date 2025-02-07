@@ -300,7 +300,9 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
+        <DCCReference Include="Libraries\MiniDelivery.Libraries.pas"/>
         <DCCReference Include="Classes\MiniDelivery.Classe.UnidadeMedida.pas"/>
+        <DCCReference Include="Classes\MiniDelivery.Classe.Entregador.pas"/>
         <DCCReference Include="Classes\MiniDelivery.Classe.Produto.pas"/>
         <DCCReference Include="Classes\MiniDelivery.Classe.Endereco.pas"/>
         <DCCReference Include="Classes\MiniDelivery.Classe.Pedido.pas"/>
@@ -312,6 +314,7 @@
         <DCCReference Include="Models\MiniDelivery.Model.Conexao.Factory.pas"/>
         <DCCReference Include="Interfaces\MiniDelivery.Entidades.Interfaces.pas"/>
         <DCCReference Include="Models\MiniDelivery.Model.Entidades.UnidadeMedida.pas"/>
+        <DCCReference Include="Models\MiniDelivery.Model.Entidades.Entregador.pas"/>
         <DCCReference Include="Models\MiniDelivery.Model.Entidades.Produto.pas"/>
         <DCCReference Include="Models\MiniDelivery.Model.Entidades.Pais.pas"/>
         <DCCReference Include="Models\MiniDelivery.Model.Entidades.Estado.pas"/>

@@ -3,7 +3,9 @@ program MiniDelovery;
 uses
   System.StartUpCopy,
   FMX.Forms,
+  MiniDelivery.Libraries in 'Libraries\MiniDelivery.Libraries.pas',
   MiniDelivery.Classe.UnidadeMedida in 'Classes\MiniDelivery.Classe.UnidadeMedida.pas',
+  MiniDelivery.Classe.Entregador in 'Classes\MiniDelivery.Classe.Entregador.pas',
   MiniDelivery.Classe.Produto in 'Classes\MiniDelivery.Classe.Produto.pas',
   MiniDelivery.Classe.Endereco in 'Classes\MiniDelivery.Classe.Endereco.pas',
   MiniDelivery.Classe.Pedido in 'Classes\MiniDelivery.Classe.Pedido.pas',
@@ -15,6 +17,7 @@ uses
   MiniDelivery.Model.Conexao.Factory in 'Models\MiniDelivery.Model.Conexao.Factory.pas',
   MiniDelivery.Entidades.Interfaces in 'Interfaces\MiniDelivery.Entidades.Interfaces.pas',
   MiniDelivery.Model.Entidades.UnidadeMedida in 'Models\MiniDelivery.Model.Entidades.UnidadeMedida.pas',
+  MiniDelivery.Model.Entidades.Entregador in 'Models\MiniDelivery.Model.Entidades.Entregador.pas',
   MiniDelivery.Model.Entidades.Produto in 'Models\MiniDelivery.Model.Entidades.Produto.pas',
   MiniDelivery.Model.Entidades.Pais in 'Models\MiniDelivery.Model.Entidades.Pais.pas',
   MiniDelivery.Model.Entidades.Estado in 'Models\MiniDelivery.Model.Entidades.Estado.pas',

@@ -7,7 +7,8 @@ uses
    MiniDelivery.Conexao.Interfaces,
    MiniDelivery.Entidades.Interfaces,
    MiniDelivery.Classe.Produto,
-   MiniDelivery.Classe.Pedido;
+   MiniDelivery.Classe.Pedido,
+   MiniDelivery.Classe.Entregador;
 
 type
    TModelEntidadePedido = class(TInterfacedObject, IModelEntidade)
@@ -25,8 +26,9 @@ type
       procedure Open(const AWhere: String = '');
       function GetPedidoElaboracao: TPedido;
       function GetPedido(const Id: Integer): TPedido;
-      function GetPedidos: TListaPedidos;
+      function GetPedidos(const Situacao: Integer = 0): TListaPedidos;
       function CriaPedido: TPedido;
+      procedure AtribuiEntregador(const Id: Integer; const Entregador: TEntregador);
       procedure FinalizaPedido(const Pedido: TPedido);
    end;
 
@@ -37,9 +39,24 @@ uses
    MiniDelivery.Model.Entidades.Factory,
    MiniDelivery.Model.Entidades.Produto,
    MiniDelivery.Model.Entidades.Municipio,
-   MiniDelivery.Model.Entidades.ItemPedido;
+   MiniDelivery.Model.Entidades.ItemPedido,
+   MiniDelivery.Model.Entidades.Entregador;
 
 { TModelEntidadePedido }
+
+procedure TModelEntidadePedido.AtribuiEntregador(const Id: Integer;
+  const Entregador: TEntregador);
+begin
+   Open(Format('WHERE id = %d', [Id]));
+   with fQuery do
+      if not Query.IsEmpty then
+         begin
+            Query.Edit;
+            Query.FieldByName('entregador_id').AsInteger := Entregador.Id;
+            Query.FieldByName('situacao').AsInteger := 3;
+            Query.Post;
+         end;
+end;
 
 constructor TModelEntidadePedido.Create(const ATipoConexao: TTipoConexao = tcFireDAC);
 begin
@@ -87,7 +104,12 @@ begin
       if not Query.IsEmpty then
          begin
             Query.Edit;
-            Query.FieldByName('nome').AsString := Pedido.Nome;
+            Query.FieldByName('nome_cliente').AsString := Pedido.Nome;
+            Query.FieldByName('endereco_cep').AsString := Pedido.Endereco.Cep;
+            Query.FieldByName('endereco_rua').AsString := Pedido.Endereco.Rua;
+            Query.FieldByName('endereco_numero').AsString := Pedido.Endereco.Numero;
+            Query.FieldByName('endereco_bairro').AsString := Pedido.Endereco.Bairro;
+            Query.FieldByName('endereco_municipio_id').AsInteger := Pedido.Endereco.Municipio.Id;
             Query.FieldByName('situacao').AsInteger := 2;
             Query.Post;
          end;
@@ -95,7 +117,8 @@ end;
 
 function TModelEntidadePedido.GetPedido(const Id: Integer): TPedido;
 var
-   AMunicipioModel: IModelEntidade;
+   AMunicipioModel,
+   AEntregadorModel: IModelEntidade;
 begin
    Result := TPedido.Create;
    Open(Format('WHERE id = %d', [Id]));
@@ -103,6 +126,7 @@ begin
       if not Query.IsEmpty then
          begin
             AMunicipioModel := TModelEntidadesFactory.New(fTipoConexao).Municipio;
+            AEntregadorModel := TModelEntidadesFactory.New(fTipoConexao).Entregador;
             Result.Id := Query.FieldByName('id').AsInteger;
             Result.Nome := Query.FieldByName('nome_cliente').AsString;
             Result.Endereco.Cep := Query.FieldByName('endereco_cep').AsString;
@@ -113,9 +137,12 @@ begin
             if Query.FieldByName('situacao').AsInteger = 1 then
                Result.Situacao := 'Elaboração'
             else if Query.FieldByName('situacao').AsInteger = 2 then
-                    Result.Situacao := 'Entrega Pendente'
+                    Result.Situacao := 'Entregador Pendente'
             else if Query.FieldByName('situacao').AsInteger = 3 then
+                    Result.Situacao := 'Entrega Pendente'
+            else if Query.FieldByName('situacao').AsInteger = 4 then
                     Result.Situacao := 'Entregue';
+            Result.Entregador := TModelEntidadeEntregador(AEntregadorModel).GetEntregador(Query.FieldByName('entregador_id').AsInteger);
          end;
 end;
 
@@ -132,22 +159,28 @@ begin
       end;
 end;
 
-function TModelEntidadePedido.GetPedidos: TListaPedidos;
+function TModelEntidadePedido.GetPedidos(const Situacao: Integer = 0): TListaPedidos;
 var
    APedido: TPedido;
-   AMunicipioModel: IModelEntidade;
+   AMunicipioModel,
+   AEntregadorModel: IModelEntidade;
 begin
    Result := TListaPedidos.Create;
-   Open();
+   if Situacao <> 0 then
+      Open(Format('WHERE situacao = %d', [Situacao]))
+   else
+      Open();
    with fQuery do
       if not Query.IsEmpty then
          begin
             Query.First;
             AMunicipioModel := TModelEntidadesFactory.New(fTipoConexao).Municipio;
+            AEntregadorModel := TModelEntidadesFactory.New(fTipoConexao).Entregador;
             while not Query.Eof do
                begin
                   APedido := TPedido.Create;
                   APedido.Id := Query.FieldByName('id').AsInteger;
+                  APedido.Nome := Query.FieldByName('nome_cliente').AsString;
                   APedido.Endereco.Cep := Query.FieldByName('endereco_cep').AsString;
                   APedido.Endereco.Rua := Query.FieldByName('endereco_rua').AsString;
                   APedido.Endereco.Numero := Query.FieldByName('endereco_numero').AsString;
@@ -156,9 +189,12 @@ begin
                   if Query.FieldByName('situacao').AsInteger = 1 then
                      APedido.Situacao := 'Elaboração'
                   else if Query.FieldByName('situacao').AsInteger = 2 then
-                          APedido.Situacao := 'Entrega Pendente'
+                          APedido.Situacao := 'Entregador Pendente'
                   else if Query.FieldByName('situacao').AsInteger = 3 then
+                          APedido.Situacao := 'Entrega Pendente'
+                  else if Query.FieldByName('situacao').AsInteger = 4 then
                           APedido.Situacao := 'Entregue';
+                  APedido.Entregador := TModelEntidadeEntregador(AEntregadorModel).GetEntregador(Query.FieldByName('entregador_id').AsInteger);
                   Result.Add(APedido);
                   Query.Next;
                end;
@@ -177,7 +213,7 @@ begin
    ASQL := '';
    ASQL := ASQL + 'SELECT id, nome_cliente, endereco_cep, endereco_rua, ';
    ASQL := ASQL + 'endereco_numero, endereco_bairro, endereco_municipio_id, ';
-   ASQL := ASQL + 'situacao ';
+   ASQL := ASQL + 'situacao, entregador_id ';
    ASQL := ASQL + 'FROM pedidos';
    if AWhere <> '' then
       ASQL := ASQL + ' ' + AWhere;

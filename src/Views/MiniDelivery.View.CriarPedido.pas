@@ -11,7 +11,7 @@ uses
   Data.DB, Data.Bind.Components, Data.Bind.DBScope, FMX.Edit, FMX.ListView.Types,
   FMX.ListView.Appearances, FMX.ListView.Adapters.Base, FMX.ListView,
   Data.Bind.EngExt, Fmx.Bind.DBEngExt, FMX.EditBox, FMX.NumberBox,
-  FMX.TabControl;
+  FMX.TabControl, FMX.ListBox, FMX.ComboEdit, FMX.Objects;
 
 type
   TfrmCriarPedido = class(TfrmPadrao)
@@ -38,8 +38,6 @@ type
     tabctrlPedido: TTabControl;
     tabitmPedido: TTabItem;
     tabitmEntrega: TTabItem;
-    btnConfirmar: TButton;
-    btnCancelar: TButton;
     lytEntrega: TLayout;
     lblNome: TLabel;
     edtNome: TEdit;
@@ -51,6 +49,17 @@ type
     edtEnderecoNumero: TEdit;
     edtEnderecoBairro: TEdit;
     lblEnderecoBairro: TLabel;
+    lblEnderecoPais: TLabel;
+    lblEnderecoEstado: TLabel;
+    lblEnderecoMunicipio: TLabel;
+    cmbedtEnderecoPais: TComboEdit;
+    cmbedtEnderecoEstado: TComboEdit;
+    cmbedtEnderecoMunicipio: TComboEdit;
+    lytConfirmacao: TLayout;
+    btnConfirmar: TSpeedButton;
+    btnCancelar: TSpeedButton;
+    recInformacoes: TRectangle;
+    lblTextoInformacoes: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure edtCodigoKeyDown(Sender: TObject; var Key: Word;
       var KeyChar: WideChar; Shift: TShiftState);
@@ -59,9 +68,13 @@ type
     procedure nbQuantidadeKeyDown(Sender: TObject; var Key: Word;
       var KeyChar: WideChar; Shift: TShiftState);
     procedure btnFinalizarClick(Sender: TObject);
+    procedure tabctrlPedidoChange(Sender: TObject);
+    procedure cmbedtEnderecoPaisChange(Sender: TObject);
+    procedure cmbedtEnderecoEstadoChange(Sender: TObject);
     procedure btnConfirmarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
-    procedure tabctrlPedidoChange(Sender: TObject);
+    procedure lstvwItensPedidoKeyDown(Sender: TObject; var Key: Word;
+      var KeyChar: WideChar; Shift: TShiftState);
   private
     { Private declarations }
     fController: IController;
@@ -69,8 +82,13 @@ type
     fPedido: TPedido;
     procedure ControlesVisiveis(const Visivel: Boolean);
     procedure AtualizaDadosPedido;
+    procedure AddHeaderItensPedido;
     procedure AtualizaListaItensPedido;
+    procedure CarregaListaPaises;
+    procedure CarregaListaEstados(const APaisId: Integer);
+    procedure CarregaListaMunicipios(const AEstadoId: Integer);
     procedure Inicializa;
+    procedure DeletaItemPedido(const APedidoId: Integer; const AProdutoId: Integer);
   public
     { Public declarations }
   end;
@@ -81,6 +99,11 @@ var
 implementation
 
 uses
+   MiniDelivery.Libraries,
+   MiniDelivery.Classe.Endereco,
+   MiniDelivery.Model.Entidades.Pais,
+   MiniDelivery.Model.Entidades.Estado,
+   MiniDelivery.Model.Entidades.Municipio,
    MiniDelivery.Model.Entidades.Produto,
    MiniDelivery.Model.Entidades.Pedido,
    MiniDelivery.Model.Entidades.ItemPedido,
@@ -89,6 +112,15 @@ uses
 {$R *.fmx}
 
 { TfrmCriarPedido }
+
+procedure TfrmCriarPedido.AddHeaderItensPedido;
+var
+  AItemHeader: TListViewItem;
+begin
+  AItemHeader := lstvwItensPedido.Items.Add;
+  AItemHeader.Purpose := TListItemPurpose.Header;
+  AItemHeader.Text := 'ITENS DO PEDIDO';
+end;
 
 procedure TfrmCriarPedido.AtualizaDadosPedido;
 begin
@@ -100,6 +132,9 @@ begin
          edtEnderecoRua.Text := fPedido.Endereco.Rua;
          edtEnderecoNumero.Text := fPedido.Endereco.Numero;
          edtEnderecoBairro.Text := fPedido.Endereco.Bairro;
+         cmbedtEnderecoPais.Text := fPedido.Endereco.Municipio.Estado.Pais.Nome;
+         cmbedtEnderecoEstado.Text := fPedido.Endereco.Municipio.Estado.Nome;
+         cmbedtEnderecoMunicipio.Text := fPedido.Endereco.Municipio.Nome;
          edtSituacaoPedido.Text := fPedido.Situacao;
       end
    else
@@ -110,6 +145,9 @@ begin
          edtEnderecoRua.Text := '';
          edtEnderecoNumero.Text := '';
          edtEnderecoBairro.Text := '';
+         cmbedtEnderecoPais.Text := 'Brasil';
+         cmbedtEnderecoEstado.Text := '';
+         cmbedtEnderecoMunicipio.Text := '';
          edtSituacaoPedido.Text := 'Em elaboração';
       end;
 end;
@@ -128,6 +166,7 @@ begin
                .GetItensPedido(fPedido.Id);
       lstvwItensPedido.BeginUpdate;
       lstvwItensPedido.Items.Clear;
+      AddHeaderItensPedido;
       for AItemPedido in AItensPedido.Items do
          begin
             AItem := lstvwItensPedido.Items.Add;
@@ -141,37 +180,18 @@ begin
                      begin
                         TListItemText(Objects.FindDrawable('txtItemPedidoArmazenamento')).Text := 'Condições de armazenamento: ' + AItemPedido.Produto.Armazenamento;
                         TListItemText(Objects.FindDrawable('txtItemPedidoArmazenamento')).Font.Style := [TFontStyle.fsBold];
-                        AItem.Height := 50;
+                        Height := 50;
                      end
                   else
-                     AItem.Height := 25;
+                     Height := 25;
+                  Tag := AItemPedido.Produto.Id;
                end;
          end;
+      lstvwItensPedido.AlternatingColors := True;
       lstvwItensPedido.EndUpdate;
    finally
       FreeAndNil(AItensPedido);
    end;
-end;
-
-procedure TfrmCriarPedido.btnCancelarClick(Sender: TObject);
-begin
-  inherited;
-   tabctrlPedido.ActiveTab := tabitmPedido;
-end;
-
-procedure TfrmCriarPedido.btnConfirmarClick(Sender: TObject);
-begin
-  inherited;
-   if MessageDlg('Confirma Finalização do Pedido?', TMsgDlgType.mtConfirmation,
-                  [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], 0,
-                  TMsgDlgBtn.mbYes) = mrYes then
-      begin
-         TModelEntidadePedido(fController
-            .Entidades
-               .Pedido).FinalizaPedido(fPedido);
-         Inicializa;
-         tabctrlPedido.ActiveTab := tabitmPedido;
-      end;
 end;
 
 procedure TfrmCriarPedido.btnFinalizarClick(Sender: TObject);
@@ -183,6 +203,8 @@ begin
          Exit;
       end;
    tabctrlPedido.ActiveTab := tabitmEntrega;
+   lytConfirmacao.Visible :=  True;
+   TSpeedButton(Sender).Visible := False;
 end;
 
 procedure TfrmCriarPedido.edtCodigoChange(Sender: TObject);
@@ -241,6 +263,9 @@ begin
    fPedido := TPedido.Create;
    fProduto := TProduto.Create;
    Inicializa;
+   CarregaListaPaises;
+   CarregaListaEstados(0);
+   CarregaListaMunicipios(0);
 end;
 
 procedure TfrmCriarPedido.Inicializa;
@@ -254,6 +279,14 @@ begin
    DeLayedSetFocus(edtCodigo);
 end;
 
+procedure TfrmCriarPedido.lstvwItensPedidoKeyDown(Sender: TObject;
+  var Key: Word; var KeyChar: WideChar; Shift: TShiftState);
+begin
+  inherited;
+   if Key = vkDelete then
+      DeletaItemPedido(fPedido.Id, TListView(Sender).Selected.Tag);
+end;
+
 procedure TfrmCriarPedido.nbQuantidadeKeyDown(Sender: TObject; var Key: Word;
   var KeyChar: WideChar; Shift: TShiftState);
 begin
@@ -263,7 +296,7 @@ begin
          TModelEntidadeItemPedido(fController
             .Entidades
                .ItemPedido)
-            .RegistraItemPedido(fPedido.Id, fProduto, nbQuantidade.Value);
+            .RegistraItemPedido(fPedido.Id, fProduto, nbQuantidade.Value, '');
 
          AtualizaListaItensPedido;
 
@@ -271,13 +304,185 @@ begin
       end;
 end;
 
+procedure TfrmCriarPedido.btnCancelarClick(Sender: TObject);
+begin
+  inherited;
+   tabctrlPedido.ActiveTab := tabitmPedido;
+end;
+
+procedure TfrmCriarPedido.btnConfirmarClick(Sender: TObject);
+var
+   AMunicipioId: Integer;
+begin
+  inherited;
+   if Trim(edtNome.Text) = '' then
+      begin
+         ShowMessage('Preencha o nome do cliente!');
+         DeLayedSetFocus(edtNome);
+         Exit;
+      end;
+
+   if Trim(edtEnderecoCep.Text) = '' then
+      begin
+         ShowMessage('Preencha o CEP do endereço do cliente!');
+         DeLayedSetFocus(edtEnderecoCep);
+         Exit;
+      end;
+
+   if Trim(edtEnderecoRua.Text) = '' then
+      begin
+         ShowMessage('Preencha o rua do endereço do cliente!');
+         DeLayedSetFocus(edtEnderecoRua);
+         Exit;
+      end;
+
+   if Trim(edtEnderecoNumero.Text) = '' then
+      begin
+         ShowMessage('Preencha o número do endereço do cliente!');
+         DeLayedSetFocus(edtEnderecoNumero);
+         Exit;
+      end;
+
+   if Trim(edtEnderecoBairro.Text) = '' then
+      begin
+         ShowMessage('Preencha o bairro do endereço do cliente!');
+         DeLayedSetFocus(edtEnderecoBairro);
+         Exit;
+      end;
+
+   if cmbedtEnderecoPais.ItemIndex < 0 then
+      begin
+         ShowMessage('Selecione o país do endereço do cliente!');
+         DeLayedSetFocus(cmbedtEnderecoPais);
+         Exit;
+      end;
+
+   if cmbedtEnderecoEstado.ItemIndex < 0 then
+      begin
+         ShowMessage('Selecione o estado do endereço do cliente!');
+         DeLayedSetFocus(cmbedtEnderecoEstado);
+         Exit;
+      end;
+
+   if cmbedtEnderecoMunicipio.ItemIndex < 0 then
+      begin
+         ShowMessage('Selecione o município do endereço do cliente!');
+         DeLayedSetFocus(cmbedtEnderecoMunicipio);
+         Exit;
+      end;
+
+   if MessageDlg('Confirma Finalização do Pedido?', TMsgDlgType.mtConfirmation,
+                  [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], 0,
+                  TMsgDlgBtn.mbYes) = mrYes then
+      begin
+         AMunicipioId := Integer(cmbedtEnderecoMunicipio.Items.Objects[cmbedtEnderecoMunicipio.ItemIndex]);
+         fPedido.Nome := edtNome.Text;
+         fPedido.Endereco.Cep := edtEnderecoCep.Text;
+         fPedido.Endereco.Rua := edtEnderecoRua.Text;
+         fPedido.Endereco.Numero := edtEnderecoNumero.Text;
+         fPedido.Endereco.Bairro := edtEnderecoBairro.Text;
+         fPedido.Endereco.Municipio := TModelEntidadeMunicipio(fController.Entidades.Municipio).GetMunicipio(AMunicipioId);
+         TModelEntidadePedido(fController
+            .Entidades
+               .Pedido).FinalizaPedido(fPedido);
+         Inicializa;
+         tabctrlPedido.ActiveTab := tabitmPedido;
+      end;
+end;
+
 procedure TfrmCriarPedido.tabctrlPedidoChange(Sender: TObject);
 begin
   inherited;
+   btnFinalizar.Visible := True;
+   lytConfirmacao.Visible := False;
    if TTabControl(Sender).ActiveTab = tabitmPedido then
       DeLayedSetFocus(edtCodigo)
    else
       DeLayedSetFocus(edtNome);
+end;
+
+procedure TfrmCriarPedido.CarregaListaEstados(const APaisId: Integer);
+var
+   AEstado: TEstado;
+   AListaEstados: TListaEstados;
+begin
+   AListaEstados := TListaEstados.Create;
+   try
+      cmbedtEnderecoEstado.BeginUpdate;
+      cmbedtEnderecoEstado.Items.Clear;
+      AListaEstados := TModelEntidadeEstado(fController.Entidades.Estado).GetEstados(APaisId);
+      for AEstado in AListaEstados.Items do
+         begin
+            cmbedtEnderecoEstado.Items.AddObject(AEstado.Nome, TObject(AEstado.Id));
+         end;
+      cmbedtEnderecoEstado.EndUpdate;
+   finally
+      FreeAndNil(AListaEstados);
+   end;
+end;
+
+procedure TfrmCriarPedido.CarregaListaPaises;
+var
+   APais: TPais;
+   AListaPaises: TListaPaises;
+begin
+   AListaPaises := TListaPaises.Create;
+   try
+      cmbedtEnderecoPais.BeginUpdate;
+      cmbedtEnderecoPais.Items.Clear;
+      AListaPaises := TModelEntidadePais(fController.Entidades.Pais).GetPaises;
+      for APais in AListaPaises.Items do
+         begin
+            cmbedtEnderecoPais.Items.AddObject(APais.Nome, TObject(APais.Id));
+         end;
+      cmbedtEnderecoPais.EndUpdate;
+   finally
+      FreeAndNil(AListaPaises);
+   end;
+end;
+
+procedure TfrmCriarPedido.cmbedtEnderecoEstadoChange(Sender: TObject);
+var
+   AEstadoId: Integer;
+begin
+  inherited;
+   if TComboEdit(Sender).ItemIndex >= 0 then
+      begin
+         AEstadoId := Integer(TComboEdit(Sender).Items.Objects[TComboEdit(Sender).ItemIndex]);
+         CarregaListaMunicipios(AEstadoId);
+      end;
+end;
+
+procedure TfrmCriarPedido.cmbedtEnderecoPaisChange(Sender: TObject);
+var
+   APaisId: Integer;
+begin
+  inherited;
+   if TComboEdit(Sender).ItemIndex >= 0 then
+      begin
+         APaisId := Integer(TComboEdit(Sender).Items.Objects[TComboEdit(Sender).ItemIndex]);
+         CarregaListaEstados(APaisId);
+      end;
+end;
+
+procedure TfrmCriarPedido.CarregaListaMunicipios(const AEstadoId: Integer);
+var
+   AMunicipio: TMunicipio;
+   AListaMunicipios: TListaMunicipios;
+begin
+   AListaMunicipios := TListaMunicipios.Create;
+   try
+      cmbedtEnderecoMunicipio.BeginUpdate;
+      cmbedtEnderecoMunicipio.Items.Clear;
+      AListaMunicipios := TModelEntidadeMunicipio(fController.Entidades.Municipio).GetMunicipios(AEstadoId);
+      for AMunicipio in AListaMunicipios.Items do
+         begin
+            cmbedtEnderecoMunicipio.Items.AddObject(AMunicipio.Nome, TObject(AMunicipio.Id));
+         end;
+      cmbedtEnderecoMunicipio.EndUpdate;
+   finally
+      FreeAndNil(AListaMunicipios);
+   end;
 end;
 
 procedure TfrmCriarPedido.ControlesVisiveis(const Visivel: Boolean);
@@ -292,6 +497,18 @@ begin
    edProdutoArmazenamnto.Visible := Visivel;
    lblQuantidade.Visible := Visivel;
    nbQuantidade.Visible := Visivel;
+end;
+
+procedure TfrmCriarPedido.DeletaItemPedido(const APedidoId,
+  AProdutoId: Integer);
+begin
+   if MessageDlg('Confirma Exclusão do Item do Pedido?', TMsgDlgType.mtConfirmation,
+                  [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], 0,
+                  TMsgDlgBtn.mbYes) = mrYes then
+      begin
+         TModelEntidadeItemPedido(fController.Entidades.ItemPedido).RemoveItemPedido(APedidoId, AProdutoId);
+         AtualizaListaItensPedido;
+      end;
 end;
 
 initialization

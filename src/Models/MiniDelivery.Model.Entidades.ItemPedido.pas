@@ -25,7 +25,8 @@ type
       procedure Open(const AWhere: String = '');
       function GetItemPedido(const PedidoId: Integer; const ItemId: Integer): TItemPedido;
       function GetItensPedido(const PedidoId: Integer): TItensPedido;
-      procedure RegistraItemPedido(const PedidoId: Integer; const AProduto: TProduto; const AQuantidade: Double);
+      procedure RegistraItemPedido(const PedidoId: Integer; const AProduto: TProduto; const AQuantidade: Double; const AAnotacoes: String);
+      procedure RemoveItemPedido(const PedidoId: Integer; const ProdutoId: Integer);
    end;
 
 implementation
@@ -80,6 +81,7 @@ begin
                      Result := TItemPedido.Create;
                      Result.Produto := TModelEntidadeProduto(AProdutoModel).GetProduto(Query.FieldByName('produto_id').AsInteger);
                      Result.Quantidade := Query.FieldByName('quantidade').AsFloat;
+                     Result.Anotacoes := Query.FieldByName('anotacoes').AsString;
                      Query.Next;
                   end;
             end;
@@ -104,6 +106,7 @@ begin
                      AItemPedido := TItemPedido.Create;
                      AItemPedido.Produto := TModelEntidadeProduto(AProdutoModel).GetProduto(Query.FieldByName('produto_id').AsInteger);
                      AItemPedido.Quantidade := Query.FieldByName('quantidade').AsFloat;
+                     AItemPedido.Anotacoes := Query.FieldByName('anotacoes').AsString;
                      Result.Add(AItemPedido);
                      Query.Next;
                   end;
@@ -122,7 +125,7 @@ var
    ASQL: String;
 begin
    ASQL := '';
-   ASQL := ASQL + 'SELECT pedido_id, produto_id, quantidade ';
+   ASQL := ASQL + 'SELECT pedido_id, produto_id, quantidade, anotacoes ';
    ASQL := ASQL + 'FROM itens_pedido ';
    if AWhere <> '' then
       ASQL := ASQL + ' ' + AWhere;
@@ -130,7 +133,7 @@ begin
 end;
 
 procedure TModelEntidadeItemPedido.RegistraItemPedido(const PedidoId: Integer;
-  const AProduto: TProduto; const AQuantidade: Double);
+  const AProduto: TProduto; const AQuantidade: Double; const AAnotacoes: String);
 begin
    Open(Format('WHERE pedido_id = %d AND produto_id = %d', [PedidoId, AProduto.Id]));
    with fQuery do
@@ -142,7 +145,19 @@ begin
          Query.FieldByName('pedido_id').AsInteger := PedidoId;
          Query.FieldByName('produto_id').AsInteger := AProduto.Id;
          Query.FieldByName('quantidade').AsFloat := Query.FieldByName('quantidade').AsFloat + AQuantidade;
+         Query.FieldByName('anotacoes').AsString := AAnotacoes;
          Query.Post;
+      end;
+end;
+
+procedure TModelEntidadeItemPedido.RemoveItemPedido(const PedidoId,
+  ProdutoId: Integer);
+begin
+   Open(Format('WHERE pedido_id = %d AND produto_id = %d', [PedidoId, ProdutoId]));
+   with fQuery do
+      begin
+         if not Query.IsEmpty then
+            Query.Delete;
       end;
 end;
 

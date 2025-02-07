@@ -1,4 +1,4 @@
-unit MiniDelivery.Model.Entidades.Pais;
+unit MiniDelivery.Model.Entidades.Entregador;
 
 interface
 
@@ -6,10 +6,10 @@ uses
    SysUtils, Data.DB, System.Json, REST.Json,
    MiniDelivery.Conexao.Interfaces,
    MiniDelivery.Entidades.Interfaces,
-   MiniDelivery.Classe.Endereco;
+   MiniDelivery.Classe.Entregador;
 
 type
-   TModelEntidadePais = class(TInterfacedObject, IModelEntidade)
+   TModelEntidadeEntregador = class(TInterfacedObject, IModelEntidade)
    private
       { Private declarations }
       fTipoConexao: TTipoConexao;
@@ -22,8 +22,8 @@ type
       function DataSet(const Value: TDataSource): IModelEntidade; overload;
       function DataSet(const Value: TDataSet): IModelEntidade; overload;
       procedure Open(const AWhere: String = '');
-      function GetPais(const Id: Integer): TPais;
-      function GetPaises: TListaPaises;
+      function GetEntregador(const Id: Integer): TEntregador;
+      function GetEntregadores: TListaEntregadores;
    end;
 
 implementation
@@ -31,35 +31,35 @@ implementation
 uses
    MiniDelivery.Model.Conexao.Factory;
 
-{ TModelEntidadePais }
+{ TModelEntidadeEntregador }
 
-constructor TModelEntidadePais.Create(const ATipoConexao: TTipoConexao = tcFireDAC);
+constructor TModelEntidadeEntregador.Create(const ATipoConexao: TTipoConexao = tcFireDAC);
 begin
    fTipoConexao := ATipoConexao;
    fQuery := TModelConexaoFactory.New(fTipoConexao).Query;
 end;
 
-function TModelEntidadePais.DataSet(const Value: TDataSet): IModelEntidade;
+function TModelEntidadeEntregador.DataSet(const Value: TDataSet): IModelEntidade;
 begin
    Result := Self;
    Value.Assign(fQuery.Query);
 end;
 
-function TModelEntidadePais.DataSet(const Value: TDataSource): IModelEntidade;
+function TModelEntidadeEntregador.DataSet(const Value: TDataSource): IModelEntidade;
 begin
    Result := Self;
    Value.DataSet := fQuery.Query;
 end;
 
-destructor TModelEntidadePais.Destroy;
+destructor TModelEntidadeEntregador.Destroy;
 begin
 
   inherited;
 end;
 
-function TModelEntidadePais.GetPais(const Id: Integer): TPais;
+function TModelEntidadeEntregador.GetEntregador(const Id: Integer): TEntregador;
 begin
-   Result := TPais.Create;
+   Result := TEntregador.Create;
    Open(Format('WHERE id = %d', [Id]));
    with fQuery do
       if not Query.IsEmpty then
@@ -69,11 +69,11 @@ begin
          end;
 end;
 
-function TModelEntidadePais.GetPaises: TListaPaises;
+function TModelEntidadeEntregador.GeTEntregadores: TListaEntregadores;
 var
-   APais: TPais;
+   AEntregador: TEntregador;
 begin
-   Result := TListaPaises.Create;
+   Result := TListaEntregadores.Create;
    Open();
    with fQuery do
       if not Query.IsEmpty then
@@ -81,27 +81,27 @@ begin
             Query.First;
             while not Query.Eof do
                begin
-                  APais := TPais.Create;
-                  APais.Id := Query.FieldByName('id').AsInteger;
-                  APais.Nome := Query.FieldByName('nome').AsString;
-                  Result.Add(APais);
+                  AEntregador := TEntregador.Create;
+                  AEntregador.Id := Query.FieldByName('id').AsInteger;
+                  AEntregador.Nome := Query.FieldByName('nome').AsString;
+                  Result.Add(AEntregador);
                   Query.Next;
                end;
          end;
 end;
 
-class function TModelEntidadePais.New(const ATipoConexao: TTipoConexao = tcFireDAC): IModelEntidade;
+class function TModelEntidadeEntregador.New(const ATipoConexao: TTipoConexao = tcFireDAC): IModelEntidade;
 begin
    Result := Self.Create(ATipoConexao);
 end;
 
-procedure TModelEntidadePais.Open(const AWhere: String);
+procedure TModelEntidadeEntregador.Open(const AWhere: String);
 var
    ASQL: String;
 begin
    ASQL := '';
    ASQL := ASQL + 'SELECT id, nome ';
-   ASQL := ASQL + 'FROM paises ';
+   ASQL := ASQL + 'FROM entregadores ';
    if AWhere <> '' then
       ASQL := ASQL + AWhere + ' ';
    ASQL := ASQL + 'ORDER BY nome';

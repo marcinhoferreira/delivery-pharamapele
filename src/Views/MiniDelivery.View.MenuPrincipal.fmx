@@ -4,6 +4,8 @@ object frmMenuPrincipal: TfrmMenuPrincipal
   Caption = 'Menu Principal'
   ClientHeight = 600
   ClientWidth = 800
+  Constraints.MinHeight = 600.000000000000000000
+  Constraints.MinWidth = 800.000000000000000000
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -39,8 +41,8 @@ object frmMenuPrincipal: TfrmMenuPrincipal
           Align = Center
           AutoSize = True
           StyledSettings = [Family, Size, FontColor]
-          Size.Width = 159.000000000000000000
-          Size.Height = 26.000000000000000000
+          Size.Width = 159.199996948242200000
+          Size.Height = 25.600000381469730000
           Size.PlatformDefault = False
           StyleLookup = 'listboxheaderlabel'
           TextSettings.Font.StyleExt = {00070000000000000004000000}

@@ -23,7 +23,7 @@ type
       function DataSet(const Value: TDataSet): IModelEntidade; overload;
       procedure Open(const AWhere: String = '');
       function GetMunicipio(const Id: Integer): TMunicipio;
-      function GetMunicipios: TListaMunicipios;
+      function GetMunicipios(const EstadoId: Integer): TListaMunicipios;
    end;
 
 implementation
@@ -75,13 +75,13 @@ begin
          end;
 end;
 
-function TModelEntidadeMunicipio.GetMunicipios: TListaMunicipios;
+function TModelEntidadeMunicipio.GetMunicipios(const EstadoId: Integer): TListaMunicipios;
 var
    AMunicipio: TMunicipio;
    AEstadoModel: IModelEntidade;
 begin
    Result := TListaMunicipios.Create;
-   Open();
+   Open(Format('WHERE estado_id = %d', [EstadoId]));
    with fQuery do
       if not Query.IsEmpty then
          begin
@@ -110,9 +110,10 @@ var
 begin
    ASQL := '';
    ASQL := ASQL + 'SELECT id, nome, estado_id ';
-   ASQL := ASQL + 'FROM municipios';
+   ASQL := ASQL + 'FROM municipios ';
    if AWhere <> '' then
-      ASQL := ASQL + ' ' + AWhere;
+      ASQL := ASQL + AWhere + ' ';
+   ASQL := ASQL + 'ORDER BY nome';
    fQuery.Open(ASQL);
    // Definindo o campo id, como autoincremento
    fQuery.Query.FieldByName('id').AutoGenerateValue := TAutoRefreshFlag.arAutoInc;

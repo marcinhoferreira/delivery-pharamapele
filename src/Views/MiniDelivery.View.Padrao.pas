@@ -22,36 +22,12 @@ type
     { Public declarations }
   end;
 
-procedure DeLayedSetFocus(Control: TControl);
-
 var
   frmPadrao: TfrmPadrao;
 
 implementation
 
-uses
-   FMX.Edit, FMX.NumberBox;
-
 {$R *.fmx}
-
-procedure DeLayedSetFocus(Control: TControl);
-begin
-   TThread.CreateAnonymousThread(
-      procedure
-      begin
-         TThread.Synchronize( nil,
-            procedure
-            begin
-               if Control Is TEdit then
-                  TEdit(Control).SelectAll();
-               if Control Is TNumberBox then
-                  TNumberBox(Control).SelectAll();
-               Control.SetFocus;
-            end
-        );
-      end
-    ).Start;
-end;
 
 { TfrmPadrao }
 

@@ -20,6 +20,7 @@ type
       fMunicipio: IModelEntidade;
       fPedido: IModelEntidade;
       fItemPedido: IModelEntidade;
+      fEntregador: IModelEntidade;
    public
       { Public declarations }
       constructor Create(const ATipoConexao: TTipoConexao = tcFireDAC);
@@ -33,6 +34,7 @@ type
       function Municipio: IModelEntidade;
       function Pedido: IModelEntidade;
       function ItemPedido: IModelEntidade;
+      function Entregador: IModelEntidade;
     end;
 
 implementation
@@ -44,7 +46,8 @@ uses
    MiniDelivery.Model.Entidades.Estado,
    MiniDelivery.Model.Entidades.Municipio,
    MiniDelivery.Model.Entidades.ItemPedido,
-   MiniDelivery.Model.Entidades.Pedido;
+   MiniDelivery.Model.Entidades.Pedido,
+   MiniDelivery.Model.Entidades.Entregador;
 
 { TModelEntidadesFactory }
 
@@ -52,6 +55,13 @@ destructor TModelEntidadesFactory.Destroy;
 begin
 
    inherited;
+end;
+
+function TModelEntidadesFactory.Entregador: IModelEntidade;
+begin
+   if not Assigned(fEntregador) then
+      fEntregador := TModelEntidadeEntregador.New(fTipoConexao);
+   Result := fEntregador;
 end;
 
 function TModelEntidadesFactory.Estado: IModelEntidade;

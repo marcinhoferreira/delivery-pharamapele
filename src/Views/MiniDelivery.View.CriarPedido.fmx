@@ -22,24 +22,68 @@ inherited frmCriarPedido: TfrmCriarPedido
         TextSettings.Trimming = None
         OnClick = btnFinalizarClick
       end
+      object lytConfirmacao: TLayout
+        Align = Right
+        Position.X = 624.000000000000000000
+        Size.Width = 176.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        Visible = False
+        TabOrder = 1
+        object btnConfirmar: TSpeedButton
+          Align = Right
+          Margins.Left = 4.000000000000000000
+          Margins.Top = 4.000000000000000000
+          Margins.Right = 4.000000000000000000
+          Margins.Bottom = 4.000000000000000000
+          Position.X = 4.000000000000000000
+          Position.Y = 4.000000000000000000
+          Size.Width = 80.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'speedbuttonstyle'
+          Text = 'Confirmar'
+          TextSettings.Trimming = None
+          OnClick = btnConfirmarClick
+        end
+        object btnCancelar: TSpeedButton
+          Align = Right
+          Margins.Left = 4.000000000000000000
+          Margins.Top = 4.000000000000000000
+          Margins.Right = 4.000000000000000000
+          Margins.Bottom = 4.000000000000000000
+          Position.X = 92.000000000000000000
+          Position.Y = 4.000000000000000000
+          Size.Width = 80.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'speedbuttonstyle'
+          Text = 'Cancelar'
+          TextSettings.Trimming = None
+          OnClick = btnCancelarClick
+        end
+      end
     end
     object lstvwItensPedido: TListView
       ItemAppearanceClassName = 'TDynamicAppearance'
       ItemEditAppearanceClassName = 'TDynamicAppearance'
       HeaderAppearanceClassName = 'TListHeaderObjects'
       FooterAppearanceClassName = 'TListHeaderObjects'
+      ItemSpaces.Left = 0.000000000000000000
+      ItemSpaces.Right = 0.000000000000000000
       Align = Client
       Size.Width = 800.000000000000000000
-      Size.Height = 255.000000000000000000
+      Size.Height = 243.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
+      OnKeyDown = lstvwItensPedidoKeyDown
       ItemAppearance.ItemHeight = 50
       ItemAppearanceObjects.ItemObjects.ObjectsCollection = <
         item
           AppearanceObjectName = 'txtItemPedidoNome'
           AppearanceClassName = 'TTextObjectAppearance'
           Appearance.TextAlign = Leading
-          Appearance.Width = 553.000000000000000000
+          Appearance.Width = 574.000000000000000000
           Appearance.Height = 25.000000000000000000
           Appearance.PlaceOffset.X = 107.000000000000000000
         end
@@ -48,7 +92,7 @@ inherited frmCriarPedido: TfrmCriarPedido
           AppearanceClassName = 'TTextObjectAppearance'
           Appearance.TextAlign = Trailing
           Appearance.Width = 119.000000000000000000
-          Appearance.Height = 25.000000000000000000
+          Appearance.Height = 50.000000000000000000
           Appearance.Align = Trailing
         end
         item
@@ -56,13 +100,15 @@ inherited frmCriarPedido: TfrmCriarPedido
           AppearanceClassName = 'TTextObjectAppearance'
           Appearance.TextAlign = Leading
           Appearance.Width = 107.000000000000000000
-          Appearance.Height = 25.000000000000000000
+          Appearance.Height = 50.000000000000000000
         end
         item
           AppearanceObjectName = 'txtItemPedidoArmazenamento'
           AppearanceClassName = 'TTextObjectAppearance'
           Appearance.TextAlign = Leading
+          Appearance.Width = 575.000000000000000000
           Appearance.Height = 25.000000000000000000
+          Appearance.PlaceOffset.X = 106.000000000000000000
           Appearance.PlaceOffset.Y = 25.000000000000000000
         end>
       ItemAppearanceObjects.ItemEditObjects.ObjectsCollection = <
@@ -70,7 +116,15 @@ inherited frmCriarPedido: TfrmCriarPedido
           AppearanceObjectName = 'Text1'
           AppearanceClassName = 'TTextObjectAppearance'
         end>
+      ItemAppearanceObjects.HeaderObjects.Text.Font.StyleExt = {00070000000000000004000000}
+      ItemAppearanceObjects.HeaderObjects.Text.TextAlign = Center
+      ItemAppearanceObjects.HeaderObjects.Text.TextColor = claMediumblue
+      ItemAppearanceObjects.HeaderObjects.Text.VertAlign = Center
+      ItemAppearanceObjects.FooterObjects.Text.Font.StyleExt = {00070000000000000004000000}
+      ItemAppearanceObjects.FooterObjects.Text.TextColor = claMediumblue
+      ItemAppearanceObjects.FooterObjects.Text.Height = 24.000000000000000000
       StyleLookup = 'listviewstyle'
+      CanSwipeDelete = False
     end
     object lytIdentificacao: TLayout
       Align = Top
@@ -121,7 +175,7 @@ inherited frmCriarPedido: TfrmCriarPedido
         Margins.Bottom = 4.000000000000000000
         Position.X = 664.000000000000000000
         Position.Y = 8.000000000000000000
-        Size.Width = 105.000000000000000000
+        Size.Width = 105.599975585937500000
         Size.Height = 16.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = 'labelstyle'
@@ -152,7 +206,7 @@ inherited frmCriarPedido: TfrmCriarPedido
       Align = Top
       Position.Y = 116.000000000000000000
       Size.Width = 800.000000000000000000
-      Size.Height = 229.000000000000000000
+      Size.Height = 209.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = 'tabcontrolstyle'
       TabIndex = 1
@@ -161,31 +215,34 @@ inherited frmCriarPedido: TfrmCriarPedido
       OnChange = tabctrlPedidoChange
       Sizes = (
         800s
-        203s
+        183s
         800s
-        203s)
+        183s)
       object tabitmPedido: TTabItem
         CustomIcon = <
           item
           end>
         TextSettings.Trimming = None
         IsSelected = False
-        Size.Width = 92.000000000000000000
+        Size.Width = 91.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = 'tabitemstyle'
         TabOrder = 0
         Text = 'tabitmPedido'
+        ExplicitSize.cx = 92.000000000000000000
+        ExplicitSize.cy = 26.000000000000000000
         object lytPedido: TLayout
           Align = Client
+          Anchors = [akLeft, akTop, akBottom]
           Size.Width = 800.000000000000000000
-          Size.Height = 203.000000000000000000
+          Size.Height = 183.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 2
           object chkProdutoControlado: TCheckBox
             Anchors = [akTop, akRight]
             Enabled = False
-            Position.X = 356.000000000000000000
+            Position.X = 540.000000000000000000
             Position.Y = 83.000000000000000000
             StyleLookup = 'checkboxstyle'
             TabOrder = 11
@@ -194,7 +251,7 @@ inherited frmCriarPedido: TfrmCriarPedido
           object chkProdutoSensivel: TCheckBox
             Anchors = [akTop, akRight]
             Enabled = False
-            Position.X = 484.000000000000000000
+            Position.X = 668.000000000000000000
             Position.Y = 83.000000000000000000
             StyleLookup = 'checkboxstyle'
             TabOrder = 10
@@ -207,13 +264,13 @@ inherited frmCriarPedido: TfrmCriarPedido
             TabOrder = 1
             CanFocus = False
             ReadOnly = True
-            Position.X = 144.000000000000000000
-            Position.Y = 140.000000000000000000
+            Position.X = 8.000000000000000000
+            Position.Y = 137.000000000000000000
             Margins.Left = 4.000000000000000000
             Margins.Top = 4.000000000000000000
             Margins.Right = 4.000000000000000000
             Margins.Bottom = 4.000000000000000000
-            Size.Width = 488.000000000000000000
+            Size.Width = 520.000000000000000000
             Size.Height = 22.000000000000000000
             Size.PlatformDefault = False
           end
@@ -243,24 +300,24 @@ inherited frmCriarPedido: TfrmCriarPedido
             TabOrder = 2
             CanFocus = False
             ReadOnly = True
-            Position.X = 144.000000000000000000
-            Position.Y = 28.000000000000000000
+            Position.X = 8.000000000000000000
+            Position.Y = 83.000000000000000000
             Margins.Left = 4.000000000000000000
             Margins.Top = 4.000000000000000000
             Margins.Right = 4.000000000000000000
             Margins.Bottom = 4.000000000000000000
-            Size.Width = 488.000000000000000000
+            Size.Width = 312.000000000000000000
             Size.Height = 22.000000000000000000
             Size.PlatformDefault = False
           end
           object edtTipo: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
-            Anchors = [akLeft, akTop, akRight]
+            Anchors = [akTop, akRight]
             StyleLookup = 'editstyle'
             TabOrder = 0
             CanFocus = False
             ReadOnly = True
-            Position.X = 144.000000000000000000
+            Position.X = 328.000000000000000000
             Position.Y = 83.000000000000000000
             Margins.Left = 4.000000000000000000
             Margins.Top = 4.000000000000000000
@@ -278,7 +335,7 @@ inherited frmCriarPedido: TfrmCriarPedido
             Margins.Bottom = 4.000000000000000000
             Position.X = 8.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 42.000000000000000000
+            Size.Width = 41.599998474121090000
             Size.Height = 16.000000000000000000
             Size.PlatformDefault = False
             StyleLookup = 'labelstyle'
@@ -292,9 +349,9 @@ inherited frmCriarPedido: TfrmCriarPedido
             Margins.Top = 4.000000000000000000
             Margins.Right = 4.000000000000000000
             Margins.Bottom = 4.000000000000000000
-            Position.X = 144.000000000000000000
+            Position.X = 8.000000000000000000
             Position.Y = 113.000000000000000000
-            Size.Width = 166.000000000000000000
+            Size.Width = 165.600006103515600000
             Size.Height = 16.000000000000000000
             Size.PlatformDefault = False
             StyleLookup = 'labelstyle'
@@ -308,9 +365,9 @@ inherited frmCriarPedido: TfrmCriarPedido
             Margins.Top = 4.000000000000000000
             Margins.Right = 4.000000000000000000
             Margins.Bottom = 4.000000000000000000
-            Position.X = 144.000000000000000000
-            Position.Y = 4.000000000000000000
-            Size.Width = 46.000000000000000000
+            Position.X = 8.000000000000000000
+            Position.Y = 59.000000000000000000
+            Size.Width = 45.599998474121090000
             Size.Height = 16.000000000000000000
             Size.PlatformDefault = False
             StyleLookup = 'labelstyle'
@@ -325,9 +382,9 @@ inherited frmCriarPedido: TfrmCriarPedido
             Margins.Top = 4.000000000000000000
             Margins.Right = 4.000000000000000000
             Margins.Bottom = 4.000000000000000000
-            Position.X = 640.000000000000000000
+            Position.X = 144.000000000000000000
             Position.Y = 8.000000000000000000
-            Size.Width = 65.000000000000000000
+            Size.Width = 65.600006103515630000
             Size.Height = 16.000000000000000000
             Size.PlatformDefault = False
             StyleLookup = 'labelstyle'
@@ -336,14 +393,15 @@ inherited frmCriarPedido: TfrmCriarPedido
             TabOrder = 8
           end
           object lblTipo: TLabel
+            Anchors = [akTop, akRight]
             AutoSize = True
             Margins.Left = 4.000000000000000000
             Margins.Top = 4.000000000000000000
             Margins.Right = 4.000000000000000000
             Margins.Bottom = 4.000000000000000000
-            Position.X = 144.000000000000000000
+            Position.X = 328.000000000000000000
             Position.Y = 59.000000000000000000
-            Size.Width = 26.000000000000000000
+            Size.Width = 26.399993896484380000
             Size.Height = 16.000000000000000000
             Size.PlatformDefault = False
             StyleLookup = 'labelstyle'
@@ -363,7 +421,7 @@ inherited frmCriarPedido: TfrmCriarPedido
             Value = 1.000000000000000000
             KeyboardType = Default
             TextSettings.HorzAlign = Trailing
-            Position.X = 640.000000000000000000
+            Position.X = 144.000000000000000000
             Position.Y = 28.000000000000000000
             VertIncrement = 1.000000000000000000
             Margins.Left = 4.000000000000000000
@@ -383,34 +441,20 @@ inherited frmCriarPedido: TfrmCriarPedido
           end>
         TextSettings.Trimming = None
         IsSelected = True
-        Size.Width = 96.000000000000000000
+        Size.Width = 95.000000000000000000
         Size.Height = 26.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = ''
         TabOrder = 0
         Text = 'tabitmEntrega'
+        ExplicitSize.cx = 96.000000000000000000
+        ExplicitSize.cy = 26.000000000000000000
         object lytEntrega: TLayout
           Align = Client
           Size.Width = 800.000000000000000000
-          Size.Height = 203.000000000000000000
+          Size.Height = 183.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
-          object btnConfirmar: TButton
-            Position.X = 316.000000000000000000
-            Position.Y = 173.000000000000000000
-            TabOrder = 5
-            Text = 'Confirmar'
-            TextSettings.Trimming = None
-            OnClick = btnConfirmarClick
-          end
-          object btnCancelar: TButton
-            Position.X = 404.000000000000000000
-            Position.Y = 173.000000000000000000
-            TabOrder = 6
-            Text = 'Cancelar'
-            TextSettings.Trimming = None
-            OnClick = btnCancelarClick
-          end
           object lblNome: TLabel
             AutoSize = True
             Margins.Left = 4.000000000000000000
@@ -419,19 +463,19 @@ inherited frmCriarPedido: TfrmCriarPedido
             Margins.Bottom = 4.000000000000000000
             Position.X = 12.000000000000000000
             Position.Y = 12.000000000000000000
-            Size.Width = 93.000000000000000000
+            Size.Width = 92.800003051757810000
             Size.Height = 16.000000000000000000
             Size.PlatformDefault = False
             StyleLookup = 'labelstyle'
             TextSettings.WordWrap = False
             Text = 'Nome do Cliente:'
-            TabOrder = 13
+            TabOrder = 16
           end
           object edtNome: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             Anchors = [akLeft, akTop, akRight]
             StyleLookup = 'editstyle'
-            TabOrder = 3
+            TabOrder = 0
             Position.X = 12.000000000000000000
             Position.Y = 36.000000000000000000
             Margins.Left = 4.000000000000000000
@@ -445,7 +489,7 @@ inherited frmCriarPedido: TfrmCriarPedido
           object edtEnderecoCep: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             StyleLookup = 'editstyle'
-            TabOrder = 4
+            TabOrder = 1
             FilterChar = '01234567890'
             Position.X = 12.000000000000000000
             Position.Y = 92.000000000000000000
@@ -465,13 +509,13 @@ inherited frmCriarPedido: TfrmCriarPedido
             Margins.Bottom = 4.000000000000000000
             Position.X = 12.000000000000000000
             Position.Y = 68.000000000000000000
-            Size.Width = 23.000000000000000000
+            Size.Width = 23.200000762939450000
             Size.Height = 16.000000000000000000
             Size.PlatformDefault = False
             StyleLookup = 'labelstyle'
             TextSettings.WordWrap = False
             Text = 'CEP:'
-            TabOrder = 9
+            TabOrder = 10
           end
           object lblEnderecoRua: TLabel
             AutoSize = True
@@ -481,13 +525,13 @@ inherited frmCriarPedido: TfrmCriarPedido
             Margins.Bottom = 4.000000000000000000
             Position.X = 113.000000000000000000
             Position.Y = 68.000000000000000000
-            Size.Width = 23.000000000000000000
+            Size.Width = 23.199996948242190000
             Size.Height = 16.000000000000000000
             Size.PlatformDefault = False
             StyleLookup = 'labelstyle'
             TextSettings.WordWrap = False
             Text = 'Rua:'
-            TabOrder = 12
+            TabOrder = 15
           end
           object edtEnderecoRua: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -513,19 +557,19 @@ inherited frmCriarPedido: TfrmCriarPedido
             Margins.Bottom = 4.000000000000000000
             Position.X = 608.000000000000000000
             Position.Y = 68.000000000000000000
-            Size.Width = 47.000000000000000000
+            Size.Width = 46.400024414062500000
             Size.Height = 16.000000000000000000
             Size.PlatformDefault = False
             StyleLookup = 'labelstyle'
             TextSettings.WordWrap = False
             Text = 'N'#250'mero:'
-            TabOrder = 11
+            TabOrder = 14
           end
           object edtEnderecoNumero: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
             Anchors = [akTop, akRight]
             StyleLookup = 'editstyle'
-            TabOrder = 1
+            TabOrder = 3
             Position.X = 608.000000000000000000
             Position.Y = 92.000000000000000000
             Margins.Left = 4.000000000000000000
@@ -538,15 +582,16 @@ inherited frmCriarPedido: TfrmCriarPedido
           end
           object edtEnderecoBairro: TEdit
             Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Anchors = [akLeft, akTop, akRight]
             StyleLookup = 'editstyle'
-            TabOrder = 0
+            TabOrder = 5
             Position.X = 12.000000000000000000
             Position.Y = 148.000000000000000000
             Margins.Left = 4.000000000000000000
             Margins.Top = 4.000000000000000000
             Margins.Right = 4.000000000000000000
             Margins.Bottom = 4.000000000000000000
-            Size.Width = 224.000000000000000000
+            Size.Width = 84.000000000000000000
             Size.Height = 22.000000000000000000
             Size.PlatformDefault = False
           end
@@ -558,15 +603,143 @@ inherited frmCriarPedido: TfrmCriarPedido
             Margins.Bottom = 4.000000000000000000
             Position.X = 12.000000000000000000
             Position.Y = 124.000000000000000000
-            Size.Width = 34.000000000000000000
+            Size.Width = 34.400001525878910000
             Size.Height = 16.000000000000000000
             Size.PlatformDefault = False
             StyleLookup = 'labelstyle'
             TextSettings.WordWrap = False
             Text = 'Bairro:'
-            TabOrder = 10
+            TabOrder = 13
+          end
+          object lblEnderecoPais: TLabel
+            Anchors = [akTop, akRight]
+            AutoSize = True
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Position.X = 104.000000000000000000
+            Position.Y = 124.000000000000000000
+            Size.Width = 23.199996948242190000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'labelstyle'
+            TextSettings.WordWrap = False
+            Text = 'Pa'#237's:'
+            TabOrder = 12
+          end
+          object lblEnderecoEstado: TLabel
+            Anchors = [akTop, akRight]
+            AutoSize = True
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Position.X = 336.000000000000000000
+            Position.Y = 124.000000000000000000
+            Size.Width = 38.399993896484380000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'labelstyle'
+            TextSettings.WordWrap = False
+            Text = 'Estado:'
+            TabOrder = 8
+          end
+          object lblEnderecoMunicipio: TLabel
+            Anchors = [akTop, akRight]
+            AutoSize = True
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Position.X = 568.000000000000000000
+            Position.Y = 124.000000000000000000
+            Size.Width = 56.000000000000000000
+            Size.Height = 16.000000000000000000
+            Size.PlatformDefault = False
+            StyleLookup = 'labelstyle'
+            TextSettings.WordWrap = False
+            Text = 'Munic'#237'pio:'
+            TabOrder = 6
+          end
+          object cmbedtEnderecoPais: TComboEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Anchors = [akTop, akRight]
+            StyleLookup = 'comboeditstyle'
+            TabOrder = 7
+            ItemHeight = 19.000000000000000000
+            ItemIndex = -1
+            Position.X = 104.000000000000000000
+            Position.Y = 148.000000000000000000
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 224.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            OnChange = cmbedtEnderecoPaisChange
+          end
+          object cmbedtEnderecoEstado: TComboEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Anchors = [akTop, akRight]
+            StyleLookup = 'comboeditstyle'
+            TabOrder = 9
+            ItemHeight = 19.000000000000000000
+            ItemIndex = -1
+            Position.X = 336.000000000000000000
+            Position.Y = 148.000000000000000000
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 224.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
+            OnChange = cmbedtEnderecoEstadoChange
+          end
+          object cmbedtEnderecoMunicipio: TComboEdit
+            Touch.InteractiveGestures = [LongTap, DoubleTap]
+            Anchors = [akTop, akRight]
+            StyleLookup = 'comboeditstyle'
+            TabOrder = 11
+            ItemHeight = 19.000000000000000000
+            ItemIndex = -1
+            Position.X = 568.000000000000000000
+            Position.Y = 148.000000000000000000
+            Margins.Left = 4.000000000000000000
+            Margins.Top = 4.000000000000000000
+            Margins.Right = 4.000000000000000000
+            Margins.Bottom = 4.000000000000000000
+            Size.Width = 224.000000000000000000
+            Size.Height = 22.000000000000000000
+            Size.PlatformDefault = False
           end
         end
+      end
+    end
+    object recInformacoes: TRectangle
+      Align = Bottom
+      Padding.Left = 4.000000000000000000
+      Padding.Top = 4.000000000000000000
+      Padding.Right = 4.000000000000000000
+      Padding.Bottom = 4.000000000000000000
+      Position.Y = 568.000000000000000000
+      Size.Width = 800.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      object lblTextoInformacoes: TLabel
+        Align = Left
+        AutoSize = True
+        Position.X = 4.000000000000000000
+        Position.Y = 4.000000000000000000
+        Size.Width = 292.000000000000000000
+        Size.Height = 24.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'listboxitemlabel'
+        TextSettings.WordWrap = False
+        Text = 'Para excluir, clique no item e tecle <Delete>'
+        TabOrder = 0
       end
     end
   end
