@@ -1,4 +1,4 @@
-# Aplicativo Mini Delivery
+# Aplicativo Delivery Pharmapele
 
 Aplicativo apresentado como possível implementação do Teste Técnico para Desenvolvedor Delphi, para a Pharmapele
 
