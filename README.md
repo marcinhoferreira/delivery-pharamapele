@@ -5,6 +5,11 @@ Aplicativo apresentado como possível implementação do Teste Técnico para Des
 ## Tecnologias utilizadas
 
   - RAD Studio 12 Athens
+  - POO
+  - MVC
+  - Padrões de Projeto
+  - Clean Code
+  - SOLID
   - Firemonkey
   - FireDAC
   - FireBirdSQL 5.0
