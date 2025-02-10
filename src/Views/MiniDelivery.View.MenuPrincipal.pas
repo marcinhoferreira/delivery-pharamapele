@@ -42,7 +42,7 @@ var
 implementation
 
 uses
-   MiniDelivery.View.CriarPedido,
+   MiniDelivery.View.Pedido,
    MiniDelivery.View.CriarOrdemEntrega,
    MiniDelivery.View.AcompanharEntrega;
 
@@ -64,7 +64,7 @@ begin
    // Traz para frente o layout principal evitando sobreposição de listas
    lytWorkArea.BringToFront;
 
-   OpenForm(TfrmCriarPedido);
+   OpenForm(TfrmPedido);
 end;
 
 procedure TfrmMenuPrincipal.lbiAcompanharEntregaClick(Sender: TObject);
@@ -74,7 +74,7 @@ end;
 
 procedure TfrmMenuPrincipal.lbiCriarPedidoClick(Sender: TObject);
 begin
-   OpenForm(TfrmCriarPedido);
+   OpenForm(TfrmPedido);
 end;
 
 procedure TfrmMenuPrincipal.lbiOrdemEntregaClick(Sender: TObject);

@@ -9,11 +9,13 @@ uses
   FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base,
   FMX.ListView, FMX.TabControl, FMX.Edit, FMX.ComboEdit,
   MiniDelivery.Controller.Interfaces,
-  MiniDelivery.Classe.Pedido, MiniDelivery.Classe.Entregador;
+  MiniDelivery.Classe.Pedido, MiniDelivery.Classe.Entregador, Data.Bind.EngExt,
+  Fmx.Bind.DBEngExt, System.Rtti, System.Bindings.Outputs, Data.Bind.Components,
+  Data.Bind.DBScope, Data.DB, Data.Bind.Grid, Fmx.Bind.Grid, Fmx.Bind.Editors,
+  FMX.Grid.Style, FMX.ScrollBox, FMX.Grid;
 
 type
   TfrmCriarOrdemEntrega = class(TfrmPadrao)
-    lstvwPedidos: TListView;
     tabctrlPedidos: TTabControl;
     tabitmPedidos: TTabItem;
     tabitmDetalhes: TTabItem;
@@ -29,20 +31,33 @@ type
     lstvwItensPedido: TListView;
     lblEntregador: TLabel;
     cmbedtEntregador: TComboEdit;
-    btnConfirma: TButton;
+    btnEditar: TSpeedButton;
+    lytToolBarConfirmacao: TLayout;
+    btnConfirmar: TSpeedButton;
+    btnCancelar: TSpeedButton;
+    BindingsList1: TBindingsList;
+    LinkGridToDataSource1: TLinkGridToDataSource;
+    dsPedidos: TDataSource;
+    bsPedidos: TBindSourceDB;
+    grdPedidos: TGrid;
     procedure FormCreate(Sender: TObject);
-    procedure lstvwPedidosItemClick(const Sender: TObject;
-      const AItem: TListViewItem);
-    procedure btnConfirmaClick(Sender: TObject);
+    procedure btnEditarClick(Sender: TObject);
+    procedure tabctrlPedidosChange(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
+    procedure btnConfirmarClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
     fController: IController;
     fPedido: TPedido;
+    fListaPedidos: TListaPedidos;
     procedure CarregaListaPedidos;
     procedure CarregaDetalhesPedido;
     procedure AddHeaderItensPedido;
-    procedure CarregaListaItensPedido(const APedidoId: Integer);
+    procedure CarregaListaItensPedido;
     procedure CarregaEntregadores;
+    procedure StatusOnGetText(Sender: TField; var Text: string; DisplayText: Boolean);
+    procedure StatusEntregaOnGetText(Sender: TField; var Text: string; DisplayText: Boolean);
   public
     { Public declarations }
   end;
@@ -72,7 +87,7 @@ begin
   AItemHeader.Text := 'ITENS DO PEDIDO';
 end;
 
-procedure TfrmCriarOrdemEntrega.btnConfirmaClick(Sender: TObject);
+procedure TfrmCriarOrdemEntrega.btnConfirmarClick(Sender: TObject);
 var
    AEntregadorId: Integer;
    AEntregador: TEntregador;
@@ -102,11 +117,28 @@ begin
       end;
 end;
 
+procedure TfrmCriarOrdemEntrega.btnEditarClick(Sender: TObject);
+begin
+  inherited;
+   with dsPedidos do
+      fPedido := TModelEntidadePedido(fController
+         .Entidades
+            .Pedido)
+               .GetPedido(DataSet
+                  .FieldByName('id').AsInteger);
+   CarregaDetalhesPedido;
+   CarregaListaItensPedido;
+   tabctrlPedidos.ActiveTab := tabitmDetalhes;
+end;
+
 procedure TfrmCriarOrdemEntrega.CarregaDetalhesPedido;
 begin
    edtNumeroPedido.Text := fPedido.Id.ToString;
    edtNome.Text := fPedido.Nome;
-   edtSituacaoPedido.Text := fPedido.Situacao;
+   if fPedido.Status = TStatus.stDigitacao then
+      edtSituacaoPedido.Text := 'Em digitação'
+   else if fPedido.Status = TStatus.stFinalizado then
+           edtSituacaoPedido.Text := 'Finalizado';
 end;
 
 procedure TfrmCriarOrdemEntrega.CarregaEntregadores;
@@ -129,8 +161,7 @@ begin
    end;
 end;
 
-procedure TfrmCriarOrdemEntrega.CarregaListaItensPedido(
-  const APedidoId: Integer);
+procedure TfrmCriarOrdemEntrega.CarregaListaItensPedido;
 var
    AItemPedido: TItemPedido;
    AItensPedido: TItensPedido;
@@ -141,7 +172,7 @@ begin
       AItensPedido := TModelEntidadeItemPedido(fController
          .Entidades
             .ItemPedido)
-               .GetItensPedido(APedidoId);
+               .GetItensPedido(fPedido.Id);
       lstvwItensPedido.BeginUpdate;
       lstvwItensPedido.Items.Clear;
       AddHeaderItensPedido;
@@ -150,6 +181,7 @@ begin
             AItem := lstvwItensPedido.Items.Add;
             with AItem do
                begin
+                  Tag := AItemPedido.Produto.Id;
                   TListItemText(Objects.FindDrawable('txtItemPedidoCodigo')).Text := AItemPedido.Produto.Codigo;
                   TListItemText(Objects.FindDrawable('txtItemPedidoNome')).Text := AItemPedido.Produto.Nome;
                   TListItemText(Objects.FindDrawable('txtItemPedidoQuantidade')).Text := Format('%15.3f', [AItemPedido.Quantidade]);
@@ -162,10 +194,8 @@ begin
                      end
                   else
                      Height := 25;
-                  Tag := AItemPedido.Produto.Id;
                end;
          end;
-      lstvwItensPedido.AlternatingColors := True;
       lstvwItensPedido.EndUpdate;
    finally
       FreeAndNil(AItensPedido);
@@ -173,32 +203,20 @@ begin
 end;
 
 procedure TfrmCriarOrdemEntrega.CarregaListaPedidos;
-var
-   APedido: TPedido;
-   AListaPedidos: TListaPedidos;
-   AItem: TListViewItem;
 begin
-   AListaPedidos := TListaPedidos.Create;
-   try
-      AListaPedidos := TModelEntidadePedido(fController.Entidades.Pedido).GetPedidos(2);
-      lstvwPedidos.BeginUpdate;
-      lstvwPedidos.Items.Clear;
-      for APedido in AListaPedidos.Items do
-         begin
-            AItem := lstvwPedidos.Items.Add;
-            with AItem do
-               begin
-                  TListItemText(Objects.FindDrawable('txtPedidoNumero')).Text := APedido.Id.ToString;
-                  TListItemText(Objects.FindDrawable('txtPedidoNome')).Text := APedido.Nome;
-                  TListItemText(Objects.FindDrawable('txtPedidoSituacao')).Text := APedido.Situacao;
-                  Tag := APedido.Id;
-               end;
-         end;
-      lstvwPedidos.AlternatingColors := True;
-      lstvwPedidos.EndUpdate;
-   finally
-      FreeAndNil(AListaPedidos);
-   end;
+   fListaPedidos := TModelEntidadePedido(fController.Entidades.Pedido).GetPedidos(TStatus.stFinalizado);
+
+   fController
+      .Entidades
+         .Pedido
+            .DataSet(dsPedidos)
+               .Open('WHERE status = 2');
+
+   with bsPedidos do
+      begin
+         DataSet.FieldByName('status').OnGetText := StatusOnGetText;
+         DataSet.FieldByName('status_entrega').OnGetText := StatusEntregaOnGetText;
+      end;
 end;
 
 procedure TfrmCriarOrdemEntrega.FormCreate(Sender: TObject);
@@ -207,18 +225,57 @@ begin
    tabctrlPedidos.TabPosition := TTabPosition.None;
    tabctrlPedidos.ActiveTab := tabitmPedidos;
    fController := TController.New;
+   fListaPedidos := TListaPedidos.Create;
+   fPedido := TPedido.Create;
    CarregaListaPedidos;
    CarregaEntregadores;
 end;
 
-procedure TfrmCriarOrdemEntrega.lstvwPedidosItemClick(const Sender: TObject;
-  const AItem: TListViewItem);
+procedure TfrmCriarOrdemEntrega.FormDestroy(Sender: TObject);
 begin
   inherited;
-   fPedido := TModelEntidadePedido(fController.Entidades.Pedido).GetPedido(AItem.Tag);
-   CarregaDetalhesPedido;
-   CarregaListaItensPedido(AItem.Tag);
-   tabctrlPedidos.ActiveTab := tabitmDetalhes;
+   with dsPedidos do
+      if DataSet.Active then
+         DataSet.Close;
+   FreeAndNil(fListaPedidos);
+   FreeAndNil(fPedido);
+end;
+
+procedure TfrmCriarOrdemEntrega.StatusEntregaOnGetText(Sender: TField;
+  var Text: string; DisplayText: Boolean);
+begin
+   case Sender.AsInteger of
+      1: Text := 'Pendente';
+      2: Text := 'Em andamento';
+      3: Text := 'Entregue';
+      else
+         Text := 'Desconhecido';
+   end;
+end;
+
+procedure TfrmCriarOrdemEntrega.StatusOnGetText(Sender: TField;
+  var Text: string; DisplayText: Boolean);
+begin
+   case Sender.AsInteger of
+      1: Text := 'Em digitação';
+      2: Text := 'Finalizado';
+      else
+         Text := 'Desconhecido';
+   end;
+end;
+
+procedure TfrmCriarOrdemEntrega.btnCancelarClick(Sender: TObject);
+begin
+  inherited;
+   CarregaListaPedidos;
+   tabctrlPedidos.ActiveTab := tabitmPedidos;
+end;
+
+procedure TfrmCriarOrdemEntrega.tabctrlPedidosChange(Sender: TObject);
+begin
+  inherited;
+   btnEditar.Visible := TTabControl(Sender).ActiveTab = tabitmPedidos;
+   lytToolBarConfirmacao.Visible := TTabControl(Sender).ActiveTab = tabitmDetalhes;
 end;
 
 initialization

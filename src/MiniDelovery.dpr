@@ -26,7 +26,7 @@ uses
   MiniDelivery.Model.Entidades.Factory in 'Models\MiniDelivery.Model.Entidades.Factory.pas',
   MiniDelivery.View.MenuPrincipal in 'Views\MiniDelivery.View.MenuPrincipal.pas' {frmMenuPrincipal},
   MiniDelivery.View.Padrao in 'Views\MiniDelivery.View.Padrao.pas' {frmPadrao},
-  MiniDelivery.View.CriarPedido in 'Views\MiniDelivery.View.CriarPedido.pas' {frmCriarPedido},
+  MiniDelivery.View.Pedido in 'Views\MiniDelivery.View.Pedido.pas' {frmPedido},
   MiniDelivery.View.CriarOrdemEntrega in 'Views\MiniDelivery.View.CriarOrdemEntrega.pas' {frmCriarOrdemEntrega},
   MiniDelivery.View.AcompanharEntrega in 'Views\MiniDelivery.View.AcompanharEntrega.pas' {frmAcompanharEntrega},
   MiniDelivery.Controller.Interfaces in 'Interfaces\MiniDelivery.Controller.Interfaces.pas',

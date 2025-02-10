@@ -327,8 +327,8 @@
         <DCCReference Include="Views\MiniDelivery.View.Padrao.pas">
             <Form>frmPadrao</Form>
         </DCCReference>
-        <DCCReference Include="Views\MiniDelivery.View.CriarPedido.pas">
-            <Form>frmCriarPedido</Form>
+        <DCCReference Include="Views\MiniDelivery.View.Pedido.pas">
+            <Form>frmPedido</Form>
         </DCCReference>
         <DCCReference Include="Views\MiniDelivery.View.CriarOrdemEntrega.pas">
             <Form>frmCriarOrdemEntrega</Form>

@@ -1,7 +1,70 @@
 inherited frmCriarOrdemEntrega: TfrmCriarOrdemEntrega
   Caption = 'Criar Ordem de Entrega'
+  OnDestroy = FormDestroy
   DesignerMasterStyle = 0
   inherited lytWorkArea: TLayout
+    inherited barToolBar: TToolBar
+      inherited lblTituloFormulario: TLabel
+        Size.Width = 696.000000000000000000
+      end
+      object btnEditar: TSpeedButton
+        Align = Right
+        Margins.Left = 4.000000000000000000
+        Margins.Top = 4.000000000000000000
+        Margins.Right = 4.000000000000000000
+        Margins.Bottom = 4.000000000000000000
+        Position.X = 756.000000000000000000
+        Position.Y = 4.000000000000000000
+        Size.Width = 40.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'composetoolbutton'
+        Text = 'Editar'
+        TextSettings.Trimming = None
+        OnClick = btnEditarClick
+      end
+      object lytToolBarConfirmacao: TLayout
+        Align = Right
+        Position.X = 624.000000000000000000
+        Size.Width = 176.000000000000000000
+        Size.Height = 48.000000000000000000
+        Size.PlatformDefault = False
+        Visible = False
+        TabOrder = 1
+        object btnConfirmar: TSpeedButton
+          Align = Right
+          Margins.Left = 4.000000000000000000
+          Margins.Top = 4.000000000000000000
+          Margins.Right = 4.000000000000000000
+          Margins.Bottom = 4.000000000000000000
+          Position.X = 4.000000000000000000
+          Position.Y = 4.000000000000000000
+          Size.Width = 80.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'speedbuttonstyle'
+          Text = 'Confirmar'
+          TextSettings.Trimming = None
+          OnClick = btnConfirmarClick
+        end
+        object btnCancelar: TSpeedButton
+          Align = Right
+          Margins.Left = 4.000000000000000000
+          Margins.Top = 4.000000000000000000
+          Margins.Right = 4.000000000000000000
+          Margins.Bottom = 4.000000000000000000
+          Position.X = 92.000000000000000000
+          Position.Y = 4.000000000000000000
+          Size.Width = 80.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          StyleLookup = 'speedbuttonstyle'
+          Text = 'Cancelar'
+          TextSettings.Trimming = None
+          OnClick = btnCancelarClick
+        end
+      end
+    end
     object tabctrlPedidos: TTabControl
       Align = Client
       Size.Width = 800.000000000000000000
@@ -11,6 +74,7 @@ inherited frmCriarOrdemEntrega: TfrmCriarOrdemEntrega
       TabIndex = 1
       TabOrder = 1
       TabPosition = PlatformDefault
+      OnChange = tabctrlPedidosChange
       Sizes = (
         800s
         526s
@@ -28,52 +92,26 @@ inherited frmCriarOrdemEntrega: TfrmCriarOrdemEntrega
         StyleLookup = 'tabitemstyle'
         TabOrder = 0
         Text = 'tabitmPedidos'
+        ExplicitSize.cx = 97.000000000000000000
+        ExplicitSize.cy = 26.000000000000000000
         object lytPedidos: TLayout
           Align = Client
           Size.Width = 800.000000000000000000
           Size.Height = 526.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
-          object lstvwPedidos: TListView
-            ItemAppearanceClassName = 'TDynamicAppearance'
-            ItemEditAppearanceClassName = 'TDynamicAppearance'
-            HeaderAppearanceClassName = 'TListHeaderObjects'
-            FooterAppearanceClassName = 'TListHeaderObjects'
+          object grdPedidos: TGrid
             Align = Client
+            CanFocus = True
+            ClipChildren = True
             Size.Width = 800.000000000000000000
             Size.Height = 526.000000000000000000
             Size.PlatformDefault = False
+            StyleLookup = 'gridstyle'
             TabOrder = 0
-            ItemAppearanceObjects.ItemObjects.ObjectsCollection = <
-              item
-                AppearanceObjectName = 'txtPedidoNome'
-                AppearanceClassName = 'TTextObjectAppearance'
-                Appearance.TextAlign = Leading
-                Appearance.Width = 477.000000000000000000
-                Appearance.Height = 44.000000000000000000
-                Appearance.PlaceOffset.X = 74.000000000000000000
-              end
-              item
-                AppearanceObjectName = 'txtPedidoNumero'
-                AppearanceClassName = 'TTextObjectAppearance'
-                Appearance.Width = 75.000000000000000000
-                Appearance.Height = 44.000000000000000000
-              end
-              item
-                AppearanceObjectName = 'txtPedidoSituacao'
-                AppearanceClassName = 'TTextObjectAppearance'
-                Appearance.Width = 227.000000000000000000
-                Appearance.Height = 44.000000000000000000
-                Appearance.Align = Trailing
-                Appearance.PlaceOffset.X = -1.000000000000000000
-              end>
-            ItemAppearanceObjects.ItemEditObjects.ObjectsCollection = <
-              item
-                AppearanceObjectName = 'Text1'
-                AppearanceClassName = 'TTextObjectAppearance'
-              end>
-            StyleLookup = 'listviewstyle'
-            OnItemClick = lstvwPedidosItemClick
+            Options = [AlternatingRowBackground, ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, AlwaysShowSelection, Tabs, Header, HeaderClick, AutoDisplacement]
+            Viewport.Width = 780.000000000000000000
+            Viewport.Height = 501.000000000000000000
           end
         end
       end
@@ -89,6 +127,8 @@ inherited frmCriarOrdemEntrega: TfrmCriarOrdemEntrega
         StyleLookup = 'tabitemstyle'
         TabOrder = 0
         Text = 'tabitmDetalhes'
+        ExplicitSize.cx = 101.000000000000000000
+        ExplicitSize.cy = 26.000000000000000000
         object lytDetalhes: TLayout
           Align = Client
           Size.Width = 800.000000000000000000
@@ -235,24 +275,13 @@ inherited frmCriarOrdemEntrega: TfrmCriarOrdemEntrega
               Size.Height = 22.000000000000000000
               Size.PlatformDefault = False
             end
-            object btnConfirma: TButton
-              Position.X = 436.000000000000000000
-              Position.Y = 84.000000000000000000
-              Size.Width = 80.000000000000000000
-              Size.Height = 25.000000000000000000
-              Size.PlatformDefault = False
-              StyleLookup = 'buttonstyle'
-              TabOrder = 14
-              Text = 'Confirma'
-              TextSettings.Trimming = None
-              OnClick = btnConfirmaClick
-            end
           end
           object lstvwItensPedido: TListView
             ItemAppearanceClassName = 'TDynamicAppearance'
             ItemEditAppearanceClassName = 'TDynamicAppearance'
             HeaderAppearanceClassName = 'TListHeaderObjects'
             FooterAppearanceClassName = 'TListHeaderObjects'
+            AlternatingColors = True
             ItemSpaces.Left = 0.000000000000000000
             ItemSpaces.Right = 0.000000000000000000
             Align = Client
@@ -312,5 +341,47 @@ inherited frmCriarOrdemEntrega: TfrmCriarOrdemEntrega
         end
       end
     end
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 548
+    Top = 58
+    object LinkGridToDataSource1: TLinkGridToDataSource
+      Category = 'Quick Bindings'
+      DataSource = bsPedidos
+      GridControl = grdPedidos
+      Columns = <
+        item
+          MemberName = 'id'
+          Header = 'N'#250'mero'
+        end
+        item
+          MemberName = 'nome_cliente'
+          Header = 'Cliente'
+          Width = 460
+        end
+        item
+          MemberName = 'status'
+          Header = 'Status'
+          Width = 120
+        end
+        item
+          MemberName = 'status_entrega'
+          Header = 'Entrega'
+          Width = 120
+        end>
+    end
+  end
+  object dsPedidos: TDataSource
+    AutoEdit = False
+    Left = 404
+    Top = 166
+  end
+  object bsPedidos: TBindSourceDB
+    DataSource = dsPedidos
+    ScopeMappings = <>
+    Left = 404
+    Top = 214
   end
 end

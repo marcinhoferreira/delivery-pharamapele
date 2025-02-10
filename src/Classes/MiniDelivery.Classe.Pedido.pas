@@ -9,6 +9,8 @@ uses
    MiniDelivery.Classe.Entregador;
 
 type
+   TStatus = (stDigitacao, stFinalizado);
+   TStatusEntrega = (sePendente, seEmAndamento, seEntregue);
    TItemPedido = class(TObject)
    private
       { Private declarations }
@@ -19,8 +21,8 @@ type
       function GetQuantidade: Double;
       procedure SetProduto(const Value: TProduto);
       procedure SetQuantidade(const Value: Double);
-    function GetAnotacoes: String;
-    procedure SetAnotacoes(const Value: String);
+      function GetAnotacoes: String;
+      procedure SetAnotacoes(const Value: String);
    protected
       { Protected declarations }
    public
@@ -53,18 +55,21 @@ type
       fId: Integer;
       fNome: String;
       fEndereco: TEndereco;
-      fSituacao: String;
+      fStatus: TStatus;
       fEntregador: TEntregador;
+      fStatusEntrega: TStatusEntrega;
       function GetId: Integer;
       function GetNome: String;
       procedure SetId(const Value: Integer);
       procedure SetNome(const Value: String);
       function GetEndereco: TEndereco;
-      function GetSituacao: String;
+      function GetStatus: TStatus;
       procedure SetEndereco(const Value: TEndereco);
-      procedure SetSituacao(const Value: String);
+      procedure SetStatus(const Value: TStatus);
       function GetEntregador: TEntregador;
       procedure SetEntregador(const Value: TEntregador);
+      function GetStatusEntrega: TStatusEntrega;
+      procedure SetStatusEntrega(const Value: TStatusEntrega);
    protected
       { Protected declarations }
    public
@@ -74,8 +79,9 @@ type
       property Id: Integer Read GetId Write SetId;
       property Nome: String Read GetNome Write SetNome;
       property Endereco: TEndereco Read GetEndereco Write SetEndereco;
-      property Situacao: String Read GetSituacao Write SetSituacao;
+      property Status: TStatus Read GetStatus Write SetStatus;
       property Entregador: TEntregador Read GetEntregador Write SetEntregador;
+      property StatusEntrega: TStatusEntrega Read GetStatusEntrega Write SetStatusEntrega;
    end;
 
    TArrayPedidos = Array Of TPedido;
@@ -130,9 +136,14 @@ begin
    Result := fNome;
 end;
 
-function TPedido.GetSituacao: String;
+function TPedido.GetStatus: TStatus;
 begin
-   Result := fSituacao;
+   Result := fStatus;
+end;
+
+function TPedido.GetStatusEntrega: TStatusEntrega;
+begin
+   Result := fStatusEntrega;
 end;
 
 procedure TPedido.SetEndereco(const Value: TEndereco);
@@ -157,10 +168,16 @@ begin
       fNome := Value;
 end;
 
-procedure TPedido.SetSituacao(const Value: String);
+procedure TPedido.SetStatus(const Value: TStatus);
 begin
-   if Value <> fSituacao then
-      fSituacao := Value;
+   if Value <> fStatus then
+      fStatus := Value;
+end;
+
+procedure TPedido.SetStatusEntrega(const Value: TStatusEntrega);
+begin
+   if Value <> fStatusEntrega then
+      fStatusEntrega := Value;
 end;
 
 { TListaPedidos }

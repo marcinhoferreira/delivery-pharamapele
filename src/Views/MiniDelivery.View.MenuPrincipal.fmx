@@ -72,7 +72,7 @@ object frmMenuPrincipal: TfrmMenuPrincipal
           Size.Height = 36.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 0
-          Text = 'Criar Pedido'
+          Text = 'Pedido'
           OnClick = lbiCriarPedidoClick
         end
         object lbiOrdemEntrega: TListBoxItem
