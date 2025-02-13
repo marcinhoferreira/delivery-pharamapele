@@ -94,6 +94,7 @@ uses
 procedure TfrmAcompanharEntrega.btnCancelarClick(Sender: TObject);
 begin
   inherited;
+   CarregaListaPedidos;
    tabctrlPedidos.ActiveTab := tabitmPedidos;
 end;
 
@@ -121,11 +122,19 @@ procedure TfrmAcompanharEntrega.btnEditarClick(Sender: TObject);
 begin
   inherited;
    with bsPedidos do
-      fPedido := TModelEntidadePedido(fController
-         .Entidades
-            .Pedido)
-               .GetPedido(DataSet
-                  .FieldByName('id').AsInteger);
+      begin
+         if DataSet.FieldByName('status_entrega').AsInteger = 3 then
+            begin
+               MessageDlg('Operação não permitida. O pedido já foi entregue!', TMsgDlgType.mtWarning, [TMsgDlgBtn.mbOK], 0);
+               Exit;
+            end;
+
+         fPedido := TModelEntidadePedido(fController
+            .Entidades
+               .Pedido)
+                  .GetPedido(DataSet
+                     .FieldByName('id').AsInteger);
+      end;
 
    fListaEntregadores := TModelEntidadeEntregador(fController.Entidades.Entregador).GetEntregadores;
    DetalhaPedido;
@@ -200,7 +209,7 @@ begin
    fController
       .Entidades
          .Pedido
-            .DataSet(dsPedidos)
+            .DataSet(dsPedidos)              33y9sa33y9sa
                .Open('WHERE status = 2');
 
    with bsPedidos do
@@ -246,6 +255,7 @@ begin
    fListaEntregadores := TListaEntregadores.Create;
    fPedido := TPedido.Create;
    CarregaListaPedidos;
+   lytToolBarDetalhes.Visible := False;
 end;
 
 procedure TfrmAcompanharEntrega.FormDestroy(Sender: TObject);

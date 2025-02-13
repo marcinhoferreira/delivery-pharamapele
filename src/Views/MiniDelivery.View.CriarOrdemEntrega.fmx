@@ -110,7 +110,7 @@ inherited frmCriarOrdemEntrega: TfrmCriarOrdemEntrega
             StyleLookup = 'gridstyle'
             TabOrder = 0
             Options = [AlternatingRowBackground, ColumnResize, ColumnMove, ColLines, RowLines, RowSelect, AlwaysShowSelection, Tabs, Header, HeaderClick, AutoDisplacement]
-            Viewport.Width = 780.000000000000000000
+            Viewport.Width = 796.000000000000000000
             Viewport.Height = 501.000000000000000000
           end
         end

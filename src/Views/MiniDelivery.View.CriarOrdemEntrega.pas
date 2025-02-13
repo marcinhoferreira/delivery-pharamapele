@@ -121,11 +121,13 @@ procedure TfrmCriarOrdemEntrega.btnEditarClick(Sender: TObject);
 begin
   inherited;
    with dsPedidos do
-      fPedido := TModelEntidadePedido(fController
-         .Entidades
-            .Pedido)
-               .GetPedido(DataSet
-                  .FieldByName('id').AsInteger);
+      begin
+         fPedido := TModelEntidadePedido(fController
+            .Entidades
+               .Pedido)
+                  .GetPedido(DataSet
+                     .FieldByName('id').AsInteger);
+      end;
    CarregaDetalhesPedido;
    CarregaListaItensPedido;
    tabctrlPedidos.ActiveTab := tabitmDetalhes;
@@ -210,7 +212,7 @@ begin
       .Entidades
          .Pedido
             .DataSet(dsPedidos)
-               .Open('WHERE status = 2');
+               .Open('WHERE status = 2 AND status_entrega = 1');
 
    with bsPedidos do
       begin
